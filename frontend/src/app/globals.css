@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.arghyam:hover {
+    color: #067a91; 
+}
