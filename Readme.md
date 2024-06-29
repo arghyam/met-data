@@ -78,6 +78,8 @@ npm run dev
 
 ## Documentation
 
-1) Link to Product requirements doc -> <p href="https://docs.google.com/document/d/1ksEgp0HVpf6-g2VbzFbRK0QwourNO4kvGDBSiBWU-bQ/edit">PRD</p>
-2) Link to User flows ->  <p href="https://www.figma.com/board/XEPBWJcePCpgsUpqtiVkQg/User-flows?node-id=0-1&t=UZ96qJ0JNMnZF7NZ-0">User Flows</p>
-3) Link to Low Fiedelity wireframes -> <p href="https://www.figma.com/design/Jz3KF76NIracs11iQLPlIX/low-fi_Met-Data?node-id=0-1&t=0qk4SkagQinvnnQq-0">Figma</p>
+Product requirements doc : [Docs](https://docs.google.com/document/d/1ksEgp0HVpf6-g2VbzFbRK0QwourNO4kvGDBSiBWU-bQ)
+
+User flows doc : [Figjam](https://www.figma.com/board/XEPBWJcePCpgsUpqtiVkQg/User-flows?node-id=0-1&t=laG0vXt4X1LQpNpt-0)
+
+Low fidelity UI wireframes : [Figma](https://www.figma.com/design/Jz3KF76NIracs11iQLPlIX/low-fi_Met-Data?node-id=0-1&t=0qk4SkagQinvnnQq-0)
