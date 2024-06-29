@@ -76,3 +76,12 @@ npm -v
 <!-- ## Backend -->
 
 #### Note : Use seperate env files for backend and frontend to run the project. Need help! Let us know to help you with the .env.
+
+## Documentation
+
+Product requirements doc : [Docs](https://docs.google.com/document/d/1ksEgp0HVpf6-g2VbzFbRK0QwourNO4kvGDBSiBWU-bQ)
+
+User flows doc : [Figjam](https://www.figma.com/board/XEPBWJcePCpgsUpqtiVkQg/User-flows?node-id=0-1&t=laG0vXt4X1LQpNpt-0)
+
+Low fidelity UI wireframes : [Figma](https://www.figma.com/design/Jz3KF76NIracs11iQLPlIX/low-fi_Met-Data?node-id=0-1&t=0qk4SkagQinvnnQq-0)
+
