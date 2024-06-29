@@ -1,3 +1,4 @@
+
 <div align="center">
 
 # MET DATA VISUALIZATION
@@ -49,26 +50,26 @@ npm -v
 3. Clone the forked repository by adding your own GitHub username in place of `<username>`.
 
 ```bash
-git clone https://github.com/<username>/met-data/
+    git clone https://github.com/<username>/met-data/
 ```
 4. Navigate to the Getit directory.
 
 ```bash
-cd met-data
-cd frontend
+    cd met-data
+    cd frontend
 ```
 
 
 5. Install all Getit dependencies. 
 
 ```bash
-npm install
+    npm install
 ```
 
 6. Run the website locally.
 
 ```bash
-npm run dev
+    npm run dev
 ```
 
 
@@ -83,3 +84,4 @@ Product requirements doc : [Docs](https://docs.google.com/document/d/1ksEgp0HVpf
 User flows doc : [Figjam](https://www.figma.com/board/XEPBWJcePCpgsUpqtiVkQg/User-flows?node-id=0-1&t=laG0vXt4X1LQpNpt-0)
 
 Low fidelity UI wireframes : [Figma](https://www.figma.com/design/Jz3KF76NIracs11iQLPlIX/low-fi_Met-Data?node-id=0-1&t=0qk4SkagQinvnnQq-0)
+
