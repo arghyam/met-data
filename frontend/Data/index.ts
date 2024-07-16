@@ -1,3 +1,39 @@
+type StateKey = "JAMMU & KASHMIR" |
+  "CHANDIGARH" |
+  "PUNJAB" |
+  "UTTARANCHAL" |
+  "HIMACHAL PRADESH" |
+  "HARYANA" |
+  "MANIPUR" |
+  "MAHARASHTRA"|
+  "RAJASTHAN" |
+  "UTTAR PRADESH" |
+  "DELHI" |
+  "BIHAR" |
+  "SIKKIM" |
+  "ARUNACHAL PRADESH" |
+  "DAMAN & DIU"|
+  "NAGALAND" |
+  "MIZORAM"|
+  "ASSAM"|
+  "TRIPURA"|
+  "MEGHALAYA"|
+  "KERALA"|
+  "PONDICHERRY"|
+  "GOA"|
+  "LAKSHADWEEP"|
+  "WEST BENGAL"|
+  "ORISSA"|
+  "JHARKHAND"|
+  "CHHATTISGARH"|
+  "MADHYA PRADESH"|
+  "ANDAMAN & NICOBAR ISLANDS"|
+  "GUJARAT"|
+  "DADRA & NAGAR HAVELI"|
+  "ANDHRA PRADESH"|
+  "KARNATAKA"|
+  "TAMIL NADU";
+
 export const states = [
   "JAMMU & KASHMIR",
   "CHANDIGARH",
@@ -36,7 +72,7 @@ export const states = [
   "TAMIL NADU",
 ];
 
-export const districts = {
+export const districts: Record<StateKey, string[]>= {
   "JAMMU & KASHMIR": [
     "JAMMU",
     "KATHUA",
@@ -54,9 +90,9 @@ export const districts = {
     "PUNCH",
   ],
 
-  CHANDIGARH: ["CHANDIGARH"],
+  "CHANDIGARH": ["CHANDIGARH"],
 
-  PUNJAB: [
+  "PUNJAB": [
     "KAPURTHALA",
     "JALANDHAR",
     "NAWANSHAHR",
@@ -76,7 +112,7 @@ export const districts = {
     "AMRITSAR",
   ],
 
-  UTTARANCHAL: [
+  "UTTARANCHAL": [
     "TEHRI GARHWAL",
     "DEHRADUN",
     "GARHWAL",
@@ -106,7 +142,7 @@ export const districts = {
     "KANGRA",
   ],
 
-  HARYANA: [
+  "HARYANA": [
     "KARNAL",
     "PANIPAT",
     "YAMUNANAGAR",
@@ -128,7 +164,7 @@ export const districts = {
     "KAITHAL",
   ],
 
-  MANIPUR: [
+  "MANIPUR": [
     "IMPHAL WEST",
     "CHANDEL",
     "CHURACHANDPUR",
@@ -140,7 +176,7 @@ export const districts = {
     "TAMENGLONG",
   ],
 
-  MAHARASHTRA: [
+  "MAHARASHTRA": [
     "MUMBAI (SUBURBAN)",
     "MUMBAI",
     "JALGAON",
@@ -178,7 +214,7 @@ export const districts = {
     "KOLHAPUR",
   ],
 
-  RAJASTHAN: [
+  "RAJASTHAN": [
     "BIKANER",
     "CHURU",
     "SIROHI",
@@ -286,9 +322,9 @@ export const districts = {
     "SONBHADRA",
   ],
 
-  DELHI: ["NEW DELHI"],
+  "DELHI": ["NEW DELHI"],
 
-  BIHAR: [
+  "BIHAR": [
     "BHAGALPUR",
     "BANKA",
     "BUXAR",
@@ -328,7 +364,7 @@ export const districts = {
     "GAYA",
   ],
 
-  SIKKIM: ["NORTH SIKKIM", "EAST SIKKIM", "WEST SIKKIM", "SOUTH SIKKIM"],
+  "SIKKIM": ["NORTH SIKKIM", "EAST SIKKIM", "WEST SIKKIM", "SOUTH SIKKIM"],
 
   "ARUNACHAL PRADESH": [
     "UPPER SUBANSIRI",
@@ -346,7 +382,7 @@ export const districts = {
 
   "DAMAN & DIU": ["DAMAN", "DIU"],
 
-  NAGALAND: [
+  "NAGALAND": [
     "TUENSANG",
     "MOKOKCHUNG",
     "WOKHA",
@@ -356,7 +392,7 @@ export const districts = {
     "ZUNHEBOTO",
   ],
 
-  MIZORAM: [
+  "MIZORAM": [
     "CHAMPHAI",
     "LUNGLEI",
     "MAMIT",
@@ -366,7 +402,7 @@ export const districts = {
     "AIZAWL",
   ],
 
-  ASSAM: [
+  "ASSAM": [
     "GOALPARA",
     "NALBARI",
     "DARRANG",
@@ -390,9 +426,9 @@ export const districts = {
     "DHUBRI",
   ],
 
-  TRIPURA: ["WEST TRIPURA", "SOUTH TRIPURA", "NORTH TRIPURA", "DHALAI"],
+  "TRIPURA": ["WEST TRIPURA", "SOUTH TRIPURA", "NORTH TRIPURA", "DHALAI"],
 
-  MEGHALAYA: [
+  "MEGHALAYA": [
     "WEST GARO HILLS",
     "EAST KHASI HILLS",
     "EAST GARO HILLS",
@@ -400,7 +436,7 @@ export const districts = {
     "JAINTIA HILLS",
   ],
 
-  KERALA: [
+  "KERALA": [
     "KASARAGOD",
     "ALAPPUZHA",
     "WAYANAD",
@@ -417,11 +453,11 @@ export const districts = {
     "PATHANAMTHITTA",
   ],
 
-  PONDICHERRY: ["PONDICHERRY", "KARAIKAL", "YANAM", "MAHE"],
+  "PONDICHERRY": ["PONDICHERRY", "KARAIKAL", "YANAM", "MAHE"],
 
-  GOA: ["NORTH GOA", "SOUTH GOA"],
+  "GOA": ["NORTH GOA", "SOUTH GOA"],
 
-  LAKSHADWEEP: ["LAKSHADWEEP"],
+  "LAKSHADWEEP": ["LAKSHADWEEP"],
 
   "WEST BENGAL": [
     "KOCH BIHAR",
@@ -444,7 +480,7 @@ export const districts = {
     "SOUTH TWENTY FOUR PARGANA",
   ],
 
-  ORISSA: [
+  "ORISSA": [
     "BARGARH",
     "JHARSUGUDA",
     "NAYAGARH",
@@ -477,7 +513,7 @@ export const districts = {
     "KORAPUT",
   ],
 
-  JHARKHAND: [
+  "JHARKHAND": [
     "LOHARDAGA",
     "DUMKA",
     "DHANBAD",
@@ -498,7 +534,7 @@ export const districts = {
     "PURBI SINGHBHUM",
   ],
 
-  CHHATTISGARH: [
+  "CHHATTISGARH": [
     "SURGUJA",
     "JASHPUR",
     "KORBA",
@@ -567,7 +603,7 @@ export const districts = {
 
   "ANDAMAN & NICOBAR ISLANDS": ["NICOBARS", "ANDAMANS"],
 
-  GUJARAT: [
+  "GUJARAT": [
     "KACHCHH",
     "MAHESANA",
     "SURAT",
@@ -623,7 +659,7 @@ export const districts = {
     "GUNTUR",
   ],
 
-  KARNATAKA: [
+  "KARNATAKA": [
     "UTTARA KANNADA",
     "CHITRADURGA",
     "DAVANAGERE",
@@ -685,8 +721,6 @@ export const districts = {
     "SIVAGANGA",
     "TIRUVANNAMALAI",
   ],
-
-  
 };
 
 export const infoTypes = ["Annual_Mean", "Annual_Total", "Monthly_Mean"];
