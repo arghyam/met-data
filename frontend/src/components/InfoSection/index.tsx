@@ -7,14 +7,14 @@ import InfoCard from "../InfoCard";
 const cardItems = [
   {
     title: "Statistics",
-    description: "Know the annual + monthly averages over the years",
+    description: "Statistics: We'll compute the annual and monthly averages and totals for various meteorological parameters. This will give us a broad overview of the data.",
     image: statistics,
     link: "/statistics",
     altText: "statistics",
   },
   {
     title: "Visualizations",
-    description: "Know the trends and patterns of the data",
+    description: "Trend Plots: These are used to visualize the change in a parameter over time.They are essentially line graphs that can show trends or patterns over a specified period.",
     image: visualizations,
     link: "/visualizations",
     altText: "visualizations",

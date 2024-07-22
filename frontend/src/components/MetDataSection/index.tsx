@@ -11,13 +11,11 @@ return (
             Met Data
           </h1>
           <p className="mb-6 text-left font-normal text-gray-600 lg:text-xl   leading-7">
-            Meteorological datasets for 13 climate parameters for all districts
-            of India from 1901 to 2002. Climate parameters included are:
-            Precipitation, Max, Min and Avg Temperature, Cloud cover, Vapour
-            pressure, Wet-day frequency, Diurnal temperature range, Ground frost
-            frequency, Reference crop evapotranspiration, Potential
-            evapotranspiration. The source data is from CRU 2.1 dataset of
-            Tyndall Centre for Climate Change Research.
+          The India Water Portal serves as a treasure of information, housing meteorological datasets for all districts of India
+          spanning over the 20th Century `(1901-2002)`. This rich resource, encompassing 13 crucial climate parameters, offers 
+          invaluable insights for researchers, water resource managers, and anyone interested in understanding India &apos; s 
+          water story. This data can be useful in making rainwater harvesting and water balance estimates, in various research 
+          areas, climate change adaptation studies and more.
           </p>
         </div>
         <div className=" text-left sm:px-16 xl:px-48">
@@ -46,7 +44,7 @@ return (
             Data Format
           </h1>
           <p className="mb-6 text-left font-normal text-gray-600 lg:text-xl  ">
-            Data is available in CSV format and charts to visualize
+          The meteorological data from the India Water Portal is currently stored in CSV files.
           </p>
         </div>
       </div>
