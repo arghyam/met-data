@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { states } from "../../../Data";
 import { districts } from "../../../Data";
 import { parameters } from "../../../Data";
 import { infoTypes } from "../../../Data";
+import axios from "axios";
 
 type StateType = string;
 type DistrictType = string;
@@ -49,6 +50,7 @@ type StateKey = "JAMMU & KASHMIR" |
 
 
 export default function Statistics() {
+  // defining states for the dropdown selector
   const [state, setState] = useState<StateType>("select a state");
   const [district, setDistrict] = useState<DistrictType | undefined>(undefined);
   const [parameter, setParameter] = useState<ParameterType | undefined>(
@@ -60,35 +62,68 @@ export default function Statistics() {
   const [endingYear, setEndingYear] = useState<number | undefined>(undefined);
   const [infoType, setInfoType] = useState<InfoType | undefined>(undefined);
 
+  // defining the response data
+  const [data, setData] = useState<any>(undefined);
+
+  // defining the event handlers
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setState(e.target.value);
-    //console.log(e.target.value);
   };
 
   const handleDistrictChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setDistrict(e.target.value);
-    //console.log(e.target.value);
   };
 
   const handleParameterChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setParameter(e.target.value);
-    //console.log(e.target.value);
   };
 
   const handleStartingYearChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setStartingYear(Number(e.target.value));
-    //console.log(e.target.value);
   };
 
   const handleEndingYearChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setEndingYear(Number(e.target.value));
-    //console.log(e.target.value);
   };
 
   const handleInfoTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setInfoType(e.target.value);
-    //console.log(e.target.value);
   };
+
+  // defining the submission handler
+  const handleSubmission = async ({
+    state,
+    district,
+    parameter,
+    startingYear,
+    endingYear,
+    infoType,
+  }: {
+    state: StateType;
+    district: DistrictType | undefined;
+    parameter: ParameterType | undefined;
+    startingYear: number | undefined;
+    endingYear: number | undefined;
+    infoType: InfoType | undefined;
+  }) => {
+    try {
+      // fetching the data from the backend
+      const response = await axios.get("http://localhost:3001/statistics", {
+        params: {
+          state,
+          district,
+          parameter,
+          startingYear,
+          endingYear,
+          infoType,
+        },
+      });
+      setData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -188,7 +223,14 @@ export default function Statistics() {
             <button 
               className="w-1/5 h-full bg-blue-500 text-white rounded-1/2"
               onClick={() => {
-                console.log(state, district, parameter, startingYear, endingYear, infoType);
+                handleSubmission({
+                  state,
+                  district,
+                  parameter,
+                  startingYear,
+                  endingYear,
+                  infoType,
+                });
               }}
             >
               Submit
