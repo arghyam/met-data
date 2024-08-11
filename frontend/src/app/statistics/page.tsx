@@ -2,93 +2,69 @@
 
 import { useState, ChangeEvent } from "react";
 import Navbar from "@/components/Navbar";
-import { states } from "../../../Data";
-import { districts } from "../../../Data";
-import { parameters } from "../../../Data";
-import { infoTypes } from "../../../Data";
+import { states, districts, parameters, infoTypes } from "../../../Data";
 
 type StateType = string;
 type DistrictType = string;
 type ParameterType = string;
 type InfoType = string;
-type StateKey = "JAMMU & KASHMIR" |
-  "CHANDIGARH" |
-  "PUNJAB" |
-  "UTTARANCHAL" |
-  "HIMACHAL PRADESH" |
-  "HARYANA" |
-  "MANIPUR" |
-  "MAHARASHTRA" |
-  "RAJASTHAN" |
-  "UTTAR PRADESH" |
-  "DELHI" |
-  "BIHAR" |
-  "SIKKIM" |
-  "ARUNACHAL PRADESH" |
-  "DAMAN & DIU" |
-  "NAGALAND" |
-  "MIZORAM" |
-  "ASSAM" |
-  "TRIPURA" |
-  "MEGHALAYA" |
-  "KERALA" |
-  "PONDICHERRY" |
-  "GOA" |
-  "LAKSHADWEEP" |
-  "WEST BENGAL" |
-  "ORISSA" |
-  "JHARKHAND" |
-  "CHHATTISGARH" |
-  "MADHYA PRADESH" |
-  "ANDAMAN & NICOBAR ISLANDS" |
-  "GUJARAT" |
-  "DADRA & NAGAR HAVELI" |
-  "ANDHRA PRADESH" |
-  "KARNATAKA" |
-  "TAMIL NADU";
 
+type StateKey = keyof typeof districts;
+
+
+type DropdownProps = {
+  label: string;
+  value: string | number | undefined;
+  options: Array<string | number | JSX.Element>;
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+};
+
+function Dropdown({ label, value, options, onChange }: DropdownProps) {
+  return (
+    <div className="w-full h-12 m-4 flex justify-center">
+      <select
+        className="w-[90%] text-center bg-gray-100 border-2 rounded-1/2"
+        value={value}
+        onChange={onChange}
+      >
+        <option value="">{label}</option>
+        {options.map((option) =>
+          typeof option === "string" || typeof option === "number" ? (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ) : (
+            option
+          )
+        )}
+      </select>
+    </div>
+  );
+}
 
 export default function Statistics() {
-  const [state, setState] = useState<StateType>("select a state");
-  const [district, setDistrict] = useState<DistrictType | undefined>(undefined);
-  const [parameter, setParameter] = useState<ParameterType | undefined>(
-    undefined
-  );
-  const [startingYear, setStartingYear] = useState<number | undefined>(
-    undefined
-  );
+  const [selectedState, setSelectedState] = useState<StateType>("select a state");
+  const [selectedDistrict, setSelectedDistrict] = useState<DistrictType | undefined>(undefined);
+  const [selectedParameter, setSelectedParameter] = useState<ParameterType | undefined>(undefined);
+  const [startingYear, setStartingYear] = useState<number | undefined>(undefined);
   const [endingYear, setEndingYear] = useState<number | undefined>(undefined);
-  const [infoType, setInfoType] = useState<InfoType | undefined>(undefined);
+  const [selectedInfoType, setSelectedInfoType] = useState<InfoType | undefined>(undefined);
 
-  const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState(e.target.value);
-    //console.log(e.target.value);
-  };
+  const handleChange = (setter: React.Dispatch<React.SetStateAction<any>>) => 
+    (e: ChangeEvent<HTMLSelectElement>) => setter(e.target.value);
 
-  const handleDistrictChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setDistrict(e.target.value);
-    //console.log(e.target.value);
-  };
+  const handleYearChange = (setter: React.Dispatch<React.SetStateAction<number | undefined>>) =>
+    (e: ChangeEvent<HTMLSelectElement>) => setter(Number(e.target.value));
 
-  const handleParameterChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setParameter(e.target.value);
-    //console.log(e.target.value);
-  };
+  const districtOptions = selectedState === "select a state"
+    ? [<option key="select" value="select a district">Select a District</option>]
+    : districts[selectedState as StateKey].map(district => (
+        <option key={district} value={district}>{district}</option>
+      ));
 
-  const handleStartingYearChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setStartingYear(Number(e.target.value));
-    //console.log(e.target.value);
-  };
-
-  const handleEndingYearChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setEndingYear(Number(e.target.value));
-    //console.log(e.target.value);
-  };
-
-  const handleInfoTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setInfoType(e.target.value);
-    //console.log(e.target.value);
-  };
+  const yearOptions = Array.from({ length: 103 }, (_, i) => 1900 + i).map(year => (
+    <option key={year} value={year}>{year}</option>
+  ));
 
   return (
     <>
@@ -96,99 +72,49 @@ export default function Statistics() {
       <div className="flex flex-col items-center justify-between lg:p-24">
         <h1 className="mt-24 text-3xl font-bold">Mean Values</h1>
         <div className="filtersection lg:w-3/5 h-full mt-16">
-          <div className="lg:grid lg:grid-cols-3 flex flex-col justify-center items-center">
-            <div className="w-full h-12 m-4 flex justify-center">
-              <select
-                className="w-[90%] text-center bg-gray-100 border-2 rounded-1/2"
-                onChange={handleStateChange}
-              >
-                <option value="select a state">Select a State</option>
-                {states.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-full h-12 m-4 flex justify-center">
-              <select
-                className="w-[90%] text-center bg-gray-100 border-2 rounded-1/2"
-                onChange={handleDistrictChange}
-              >
-                <option value="select a district">Select a District</option>
-                {
-                  state === "select a state" ? (
-                    <option value="select a district">Select a District</option>
-                  ) : (
-                    districts[state as StateKey].map((district) => (
-                      <option key={district} value={district}>
-                        {district}
-                      </option>
-                    ))
-                  )
-                }
-              </select>
-            </div>
-            <div className="w-full h-12 m-4 flex justify-center">
-              <select
-                className="w-[90%] text-center bg-gray-100 border-2 rounded-1/2"
-                onChange={handleParameterChange}
-              >
-                <option value="select a parameter">Select a Parameter</option>
-                {parameters.map((parameter) => (
-                  <option key={parameter} value={parameter}>
-                    {parameter}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-full h-12 m-4 flex justify-center">
-              <select
-                className="w-[90%] text-center bg-gray-100 border-2 rounded-1/2"
-                onChange={handleStartingYearChange}
-              >
-                <option value="select a starting year">
-                  Select a Starting Year
-                </option>
-                {Array.from({ length: 103 }, (_, i) => i + 1900).map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-full h-12 m-4 flex justify-center">
-              <select
-                className="w-[90%] text-center bg-gray-100 border-2 rounded-1/2"
-                onChange={handleEndingYearChange}
-              >
-                <option value="select a ending year">Select a Ending Year</option>
-                {Array.from({ length: 103 }, (_, i) => i + 1900).map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-full h-12 m-4 flex justify-center">
-              <select
-                className="w-[90%] text-center bg-gray-100 border-2 rounded-1/2"
-                onChange={handleInfoTypeChange}
-              >
-                <option value="select a info type">Select a Info Type</option>
-                {infoTypes.map((infoType) => (
-                  <option key={infoType} value={infoType}>
-                    {infoType}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div className="lg:grid lg:grid-cols-3 flex flex-col justify-center items-center gap-4">
+            <Dropdown
+              label="Select a State"
+              value={selectedState}
+              options={states}
+              onChange={handleChange(setSelectedState)}
+            />
+            <Dropdown
+              label="Select a District"
+              value={selectedDistrict}
+              options={districtOptions}
+              onChange={handleChange(setSelectedDistrict)}
+            />
+            <Dropdown
+              label="Select a Parameter"
+              value={selectedParameter}
+              options={parameters}
+              onChange={handleChange(setSelectedParameter)}
+            />
+            <Dropdown
+              label="Select a Starting Year"
+              value={startingYear}
+              options={yearOptions}
+              onChange={handleYearChange(setStartingYear)}
+            />
+            <Dropdown
+              label="Select an Ending Year"
+              value={endingYear}
+              options={yearOptions}
+              onChange={handleYearChange(setEndingYear)}
+            />
+            <Dropdown
+              label="Select an Info Type"
+              value={selectedInfoType}
+              options={infoTypes}
+              onChange={handleChange(setSelectedInfoType)}
+            />
           </div>
           <div className="w-full h-12 m-4 flex justify-center">
             <button 
               className="w-1/5 h-full bg-blue-500 text-white rounded-1/2"
               onClick={() => {
-                console.log(state, district, parameter, startingYear, endingYear, infoType);
+                console.log(selectedState, selectedDistrict, selectedParameter, startingYear, endingYear, selectedInfoType);
               }}
             >
               Submit
