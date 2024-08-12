@@ -147,7 +147,7 @@ export default function Visualizations() {
             />
           </div>
         </div>
-        <div className="exportDropdown w-full h-12 flex justify-center items-center my-4">
+        {/* <div className="exportDropdown w-full h-12 flex justify-center items-center my-4">
           <span className="h-full text-lg text-white bg-blue-600 border-2 border-blue-600 rounded-l-md p-2">
             Export as :
           </span>
@@ -160,7 +160,7 @@ export default function Visualizations() {
             <option className="bg-gray-200 text-black" value="png">PNG</option>
             <option className="bg-gray-200 text-black" value="svg">SVG</option>
           </select>
-        </div>
+        </div> */}
       </div>
     </div>
   );
