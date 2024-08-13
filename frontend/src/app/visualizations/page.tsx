@@ -19,13 +19,16 @@ const Dropdown = ({
   value: string;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
 }) => (
-  <div className="w-full h-12 m-4 flex justify-center">
+  <div className="w-full  m-4 flex flex-col items-center">
+    <div className="w-full items-left">
+      <label className="ml-4 text-left text-[#067A91]">{label}</label>
+    </div>
     <select
-      className="w-[90%] text-center bg-gray-100 border-2 rounded-md"
+      className="w-[90%] h-12 text-center bg-gray-100 border-2 rounded-md"
       value={value}
       onChange={onChange}
     >
-      <option value="">{label}</option>
+      <option value="">Select {label}</option>
       {options.map((option) => (
         <option key={option} value={option}>
           {option}
@@ -43,40 +46,55 @@ export default function Visualizations() {
   const [endingYear, setEndingYear] = useState<number | undefined>();
   const [infoType, setInfoType] = useState<string>("");
   const [exportType, setExportType] = useState<string | undefined>();
-  const [showText , setShowText] = useState<boolean | undefined>();
+  const [showText, setShowText] = useState<boolean | undefined>();
 
   const handleStateChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setState(event.target.value);
-    setDistrict(""); 
+    setDistrict("");
+  };
+
+  const handleEndingYearChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const endingYear = parseInt(event.target.value);
+
+    if (startingYear && endingYear < startingYear) {
+      alert("Ending year must be greater than or equal to the starting year.");
+      setEndingYear(undefined);
+    } else {
+      setEndingYear(endingYear);
+    }
   };
 
   return (
     <div>
       <Navbar />
-      <div className={`flex flex-col items-center justify-between ${!showText && `lg:pd-16`} lg:px-16 lg:pt-16`}>
+      <div
+        className={`flex flex-col items-center justify-between ${
+          !showText && `lg:pd-16`
+        } lg:px-16 lg:pt-16`}
+      >
         <h1 className="mt-24 text-3xl font-bold">Charts</h1>
         <div className="filtersection lg:w-3/5 h-full mt-16">
           <div className="lg:grid lg:grid-cols-3 flex flex-col justify-center items-center">
             <Dropdown
-              label="Select a State"
+              label="State"
               options={states}
               value={state}
               onChange={handleStateChange}
             />
             <Dropdown
-              label="Select a District"
+              label=" District"
               options={state ? districts[state as StateKey] : []}
               value={district}
               onChange={(e) => setDistrict(e.target.value)}
             />
             <Dropdown
-              label="Select a Parameter"
+              label="Parameter"
               options={parameters}
               value={parameter}
               onChange={(e) => setParameter(e.target.value)}
             />
             <Dropdown
-              label="Select a Starting Year"
+              label="Starting Year"
               options={Array.from({ length: 103 }, (_, i) =>
                 (1900 + i).toString()
               )}
@@ -84,15 +102,15 @@ export default function Visualizations() {
               onChange={(e) => setStartingYear(parseInt(e.target.value))}
             />
             <Dropdown
-              label="Select an Ending Year"
+              label="Ending Year"
               options={Array.from({ length: 103 }, (_, i) =>
                 (1900 + i).toString()
               )}
               value={endingYear?.toString() || ""}
-              onChange={(e) => setEndingYear(parseInt(e.target.value))}
+              onChange={handleEndingYearChange}
             />
             <Dropdown
-              label="Select an Info Type"
+              label="Info Type"
               options={["Trend_Chart"]}
               value={infoType}
               onChange={(e) => setInfoType(e.target.value)}
@@ -101,8 +119,7 @@ export default function Visualizations() {
           <div className="w-full h-12 lg:m-4 flex justify-center">
             <button
               className="w-1/5 h-full bg-blue-500 text-white rounded-md"
-              onClick={() =>
-                {
+              onClick={() => {
                 console.log(
                   state,
                   district,
@@ -112,8 +129,7 @@ export default function Visualizations() {
                   infoType
                 );
                 setShowText(!showText);
-              }
-              }
+              }}
             >
               Submit
             </button>

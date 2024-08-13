@@ -4,67 +4,59 @@ import { useState, ChangeEvent } from "react";
 import Navbar from "@/components/Navbar";
 import { states, districts, parameters, infoTypes } from "../../../Data";
 
-type StateType = string;
-type DistrictType = string;
-type ParameterType = string;
-type InfoType = string;
-
 type StateKey = keyof typeof districts;
-
 
 type DropdownProps = {
   label: string;
-  value: string | number | undefined;
-  options: Array<string | number | JSX.Element>;
+  value: string;
+  options: Array<string>;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 };
 
-function Dropdown({ label, value, options, onChange }: DropdownProps) {
-  return (
-    <div className="w-full h-12 m-4 flex justify-center">
-      <select
-        className="w-[90%] text-center bg-gray-100 border-2 rounded-1/2"
-        value={value}
-        onChange={onChange}
-      >
-        <option value="">{label}</option>
-        {options.map((option) =>
-          typeof option === "string" || typeof option === "number" ? (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ) : (
-            option
-          )
-        )}
-      </select>
+const Dropdown = ({ label, options, value, onChange }: DropdownProps) => (
+  <div className="w-full m-4 flex flex-col items-center">
+    <div className="w-full text-left">
+      <label className="ml-4 text-[#067A91]">{label}</label>
     </div>
-  );
-}
+    <select
+      className="w-[90%] h-12 text-center bg-gray-100 border-2 rounded-md"
+      value={value}
+      onChange={onChange}
+    >
+      <option value="">Select {label}</option>
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  </div>
+);
 
 export default function Statistics() {
-  const [selectedState, setSelectedState] = useState<StateType>("select a state");
-  const [selectedDistrict, setSelectedDistrict] = useState<DistrictType | undefined>(undefined);
-  const [selectedParameter, setSelectedParameter] = useState<ParameterType | undefined>(undefined);
-  const [startingYear, setStartingYear] = useState<number | undefined>(undefined);
-  const [endingYear, setEndingYear] = useState<number | undefined>(undefined);
-  const [selectedInfoType, setSelectedInfoType] = useState<InfoType | undefined>(undefined);
+  const [state, setState] = useState<string>("");
+  const [district, setDistrict] = useState<string>("");
+  const [parameter, setParameter] = useState<string>("");
+  const [startingYear, setStartingYear] = useState<number | undefined>();
+  const [endingYear, setEndingYear] = useState<number | undefined>();
+  const [infoType, setInfoType] = useState<string>("");
 
-  const handleChange = (setter: React.Dispatch<React.SetStateAction<any>>) => 
-    (e: ChangeEvent<HTMLSelectElement>) => setter(e.target.value);
+  const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setState(e.target.value);
+    setDistrict("");
+  };
 
-  const handleYearChange = (setter: React.Dispatch<React.SetStateAction<number | undefined>>) =>
-    (e: ChangeEvent<HTMLSelectElement>) => setter(Number(e.target.value));
+  const handleEndingYearChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedYear = parseInt(e.target.value);
+    if (startingYear && selectedYear < startingYear) {
+      alert("Ending year must be greater than or equal to the starting year.");
+      setEndingYear(undefined);
+    } else {
+      setEndingYear(selectedYear);
+    }
+  };
 
-  const districtOptions = selectedState === "select a state"
-    ? [<option key="select" value="select a district">Select a District</option>]
-    : districts[selectedState as StateKey].map(district => (
-        <option key={district} value={district}>{district}</option>
-      ));
-
-  const yearOptions = Array.from({ length: 103 }, (_, i) => 1900 + i).map(year => (
-    <option key={year} value={year}>{year}</option>
-  ));
+  const yearOptions = Array.from({ length: 103 }, (_, i) => (1900 + i).toString());
 
   return (
     <>
@@ -74,47 +66,47 @@ export default function Statistics() {
         <div className="filtersection lg:w-3/5 h-full mt-16">
           <div className="lg:grid lg:grid-cols-3 flex flex-col justify-center items-center gap-4">
             <Dropdown
-              label="Select a State"
-              value={selectedState}
+              label="State"
               options={states}
-              onChange={handleChange(setSelectedState)}
+              value={state}
+              onChange={handleStateChange}
             />
             <Dropdown
-              label="Select a District"
-              value={selectedDistrict}
-              options={districtOptions}
-              onChange={handleChange(setSelectedDistrict)}
+              label="District"
+              options={state ? districts[state as StateKey] : []}
+              value={district}
+              onChange={(e) => setDistrict(e.target.value)}
             />
             <Dropdown
-              label="Select a Parameter"
-              value={selectedParameter}
+              label="Parameter"
               options={parameters}
-              onChange={handleChange(setSelectedParameter)}
+              value={parameter}
+              onChange={(e) => setParameter(e.target.value)}
             />
             <Dropdown
-              label="Select a Starting Year"
-              value={startingYear}
+              label="Starting Year"
               options={yearOptions}
-              onChange={handleYearChange(setStartingYear)}
+              value={startingYear?.toString() || ""}
+              onChange={(e) => setStartingYear(parseInt(e.target.value))}
             />
             <Dropdown
-              label="Select an Ending Year"
-              value={endingYear}
+              label="Ending Year"
               options={yearOptions}
-              onChange={handleYearChange(setEndingYear)}
+              value={endingYear?.toString() || ""}
+              onChange={handleEndingYearChange}
             />
             <Dropdown
               label="Select an Info Type"
-              value={selectedInfoType}
               options={infoTypes}
-              onChange={handleChange(setSelectedInfoType)}
+              value={infoType}
+              onChange={(e) => setInfoType(e.target.value)}
             />
           </div>
           <div className="w-full h-12 m-4 flex justify-center">
-            <button 
-              className="w-1/5 h-full bg-blue-500 text-white rounded-1/2"
+            <button
+              className="w-1/5 h-full bg-blue-500 text-white rounded-md"
               onClick={() => {
-                console.log(selectedState, selectedDistrict, selectedParameter, startingYear, endingYear, selectedInfoType);
+                console.log(state, district, parameter, startingYear, endingYear, infoType);
               }}
             >
               Submit
