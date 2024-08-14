@@ -111,8 +111,8 @@ export default function Visualizations() {
             />
             <Dropdown
               label="Info Type"
-              options={["Trend_Chart"]}
-              value={infoType}
+              options={["Trend Chart"]}
+              value={"Trend Chart"}
               onChange={(e) => setInfoType(e.target.value)}
             />
           </div>
