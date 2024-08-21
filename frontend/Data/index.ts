@@ -726,15 +726,15 @@ export const districts: Record<StateKey, string[]>= {
 export const infoTypes = ["Annual_Mean", "Annual_Total", "Monthly_Mean"];
 
 export const parameters = [
-  "Precipitation",
-  "Average Temperature",
-  "Maximum Temperature",
-  "Minimum Temperature",
-  "Cloud cover",
-  "Vapour pressure",
-  "Wet day frequency",
-  "Diurnal temperature range",
-  "Ground frost frequency",
-  "Reference Crop Evapotranspiration",
-  "Potential Evapotranspiration",
+  "precipitation",
+  "average_temperature",
+  "maximum_temperature",
+  "minimum_temperature",
+  "cloud_cover",
+  "vapour_pressure",
+  "wet_day_frequency",
+  "diurnal_temperature_range",
+  "ground_frost_frequency",
+  "reference_crop_evapotranspiration",
+  "potential_evapotranspiration",
 ];

@@ -3,6 +3,8 @@
 import { useState, ChangeEvent } from "react";
 import Navbar from "@/components/Navbar";
 import { states, districts, parameters, infoTypes } from "../../../Data";
+import axios from "axios";
+import DataTable from "@/components/Datatable";
 
 type StateKey = keyof typeof districts;
 
@@ -12,6 +14,13 @@ type DropdownProps = {
   options: Array<string>;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 };
+
+interface DataEntry {
+  state: string;
+  district: string;
+  year: number;
+  annual_mean: number;
+}
 
 const Dropdown = ({ label, options, value, onChange }: DropdownProps) => (
   <div className="w-full m-4 flex flex-col items-center">
@@ -40,6 +49,7 @@ export default function Statistics() {
   const [startingYear, setStartingYear] = useState<number | undefined>();
   const [endingYear, setEndingYear] = useState<number | undefined>();
   const [infoType, setInfoType] = useState<string>("");
+  const [data, setData] = useState<DataEntry[]>([]);
 
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setState(e.target.value);
@@ -56,7 +66,35 @@ export default function Statistics() {
     }
   };
 
-  const yearOptions = Array.from({ length: 103 }, (_, i) => (1900 + i).toString());
+  const yearOptions = Array.from({ length: 103 }, (_, i) =>
+    (1900 + i).toString()
+  );
+
+  const handleSubmit = () => {
+    if (!state || !district || !parameter || !startingYear || !endingYear || !infoType) {
+      alert("Please fill all the fields.");
+      return;
+    }
+    console.log(state, district, parameter, startingYear, endingYear, infoType);
+    axios
+      .get("http://localhost:8080/api/statistics", {
+        params: {
+          state,
+          district,
+          parameter,
+          startingYear,
+          endingYear,
+          infoType,
+        },
+      })
+      .then((res) => {
+        setData(res.data.data);
+        console.log(res.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   return (
     <>
@@ -105,13 +143,14 @@ export default function Statistics() {
           <div className="w-full h-12 m-4 flex justify-center">
             <button
               className="w-1/5 h-full bg-blue-500 text-white rounded-md"
-              onClick={() => {
-                console.log(state, district, parameter, startingYear, endingYear, infoType);
-              }}
+              onClick={handleSubmit}
             >
               Submit
             </button>
           </div>
+        </div>
+        <div className="output w-3/4 lg:w-3/5 h-96 m-8 bg-gray-200 p-4 overflow-scroll">
+          {data.length > 0 ? <DataTable data={data} /> : <p>No data available</p>}
         </div>
       </div>
     </>

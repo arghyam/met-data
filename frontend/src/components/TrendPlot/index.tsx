@@ -44,9 +44,15 @@ const LineChart: React.FC<LineChartProps> = ({ data = [], width, height, xLabel,
       .x(d => x(d.year))
       .y(d => y(d.value));
 
-    svg.append('g')
+    const xAxis = svg.append('g')
       .attr('transform', `translate(0,${height - margin.bottom})`)
-      .call(d3.axisBottom(x).ticks(data.length).tickFormat(d3.format('d')));
+      .call(d3.axisBottom(x).ticks(Math.min(data.length, 10)).tickFormat(d3.format('d')));
+
+    xAxis.selectAll('text')
+      .attr('transform', 'rotate(-45)')
+      .style('text-anchor', 'end');
+
+    
 
     svg.append('g')
       .attr('transform', `translate(${margin.left},0)`)

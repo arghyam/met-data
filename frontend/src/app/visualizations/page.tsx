@@ -3,7 +3,7 @@
 import { useState, ChangeEvent } from "react";
 import Navbar from "@/components/Navbar";
 import LineChart from "@/components/TrendPlot";
-import { plotdata } from "../../../Data/plotdata";
+import axios from "axios";
 import { states, districts, parameters } from "../../../Data";
 
 type StateKey = keyof typeof districts;
@@ -47,6 +47,7 @@ export default function Visualizations() {
   const [infoType, setInfoType] = useState<string>("");
   const [exportType, setExportType] = useState<string | undefined>();
   const [showText, setShowText] = useState<boolean | undefined>();
+  const [data, setData] = useState<any | undefined>();
 
   const handleStateChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setState(event.target.value);
@@ -62,6 +63,40 @@ export default function Visualizations() {
     } else {
       setEndingYear(endingYear);
     }
+  };
+
+  const handleSubmit = () => {
+    setShowText(true);
+    console.log(state, district, parameter, startingYear, endingYear, infoType);
+    if (
+      !state ||
+      !district ||
+      !parameter ||
+      !startingYear ||
+      !endingYear ||
+      !infoType
+    ) {
+      alert("Please fill all the fields.");
+      return;
+    }
+    axios
+      .get("http://localhost:8080/api/visualizations", {
+        params: {
+          state,
+          district,
+          parameter,
+          startingYear,
+          endingYear,
+          infoType,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -111,56 +146,51 @@ export default function Visualizations() {
             />
             <Dropdown
               label="Info Type"
-              options={["Trend Chart"]}
-              value={"Trend Chart"}
+              options={["trend_plot"]}
+              value={infoType}
               onChange={(e) => setInfoType(e.target.value)}
             />
           </div>
           <div className="w-full h-12 lg:m-4 flex justify-center">
             <button
               className="w-1/5 h-full bg-blue-500 text-white rounded-md"
-              onClick={() => {
-                console.log(
-                  state,
-                  district,
-                  parameter,
-                  startingYear,
-                  endingYear,
-                  infoType
-                );
-                setShowText(!showText);
-              }}
+              onClick={handleSubmit} // Corrected here
             >
               Submit
             </button>
           </div>
         </div>
       </div>
-      <div className="w-full h-full p-8">
-        {showText && (
+      {showText && (
           <span className="chartInfo w-full h-10 my-12 lg:my-2 text-lg text-black flex items-center justify-center text-center">
             Annual average trend for {state}, {district} over {parameter} from{" "}
             {startingYear} to {endingYear}
           </span>
         )}
+      <div className="w-[90%] lg:w-3/5 h-full ml-auto mr-auto p-8 overflow-scroll">
+        
         <div className="chartArea w-full h-full flex justify-center">
           <div className="plot flex justify-center h-full bg-gray-200 hidden md:block">
-            <LineChart
-              data={plotdata}
-              width={800}
-              height={400}
-              xLabel={"Years"}
-              yLabel={parameter}
-            />
+            <div className="overflow-x-auto">
+              <LineChart
+                data={data}
+                width={900}
+                height={400}
+                xLabel={"Years"}
+                yLabel={parameter}
+              />
+            </div>
           </div>
           <div className="plot h-full bg-gray-200 block md:hidden">
-            <LineChart
-              data={plotdata}
-              width={300}
-              height={200}
-              xLabel={"Years"}
-              yLabel={parameter}
-            />
+            <div className="overflow-x-auto">
+              <LineChart
+                data={data}
+                width={400}
+                height={200}
+                xLabel={"Years"}
+                yLabel={parameter}
+              />
+            </div>
           </div>
         </div>
         {/* <div className="exportDropdown w-full h-12 flex justify-center items-center my-4">

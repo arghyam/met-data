@@ -5,3 +5,7 @@
 .arghyam:hover {
     color: #067a91; 
 }
+
+.overflow-x-auto {
+    overflow-x: auto;
+  }
