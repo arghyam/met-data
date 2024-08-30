@@ -1,19 +1,15 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import Navbar from "@/components/Navbar";
 import { states, districts, parameters, infoTypes } from "../../../Data";
+import preloader from "../../../public/media/preLoader.gif";
 import axios from "axios";
+import Image from "next/image";
 import DataTable from "@/components/Datatable";
+import Dropdown from "@/components/Dropdown";
+import { setgid } from "process";
 
 type StateKey = keyof typeof districts;
-
-type DropdownProps = {
-  label: string;
-  value: string;
-  options: Array<string>;
-  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
-};
 
 interface DataEntry {
   state: string;
@@ -21,26 +17,6 @@ interface DataEntry {
   year: number;
   annual_mean: number;
 }
-
-const Dropdown = ({ label, options, value, onChange }: DropdownProps) => (
-  <div className="w-full m-4 flex flex-col items-center">
-    <div className="w-full text-left">
-      <label className="ml-4 text-[#067A91]">{label}</label>
-    </div>
-    <select
-      className="w-[90%] h-12 text-center bg-gray-100 border-2 rounded-md"
-      value={value}
-      onChange={onChange}
-    >
-      <option value="">Select {label}</option>
-      {options.map((option) => (
-        <option key={option} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  </div>
-);
 
 export default function Statistics() {
   const [state, setState] = useState<string>("");
@@ -50,6 +26,8 @@ export default function Statistics() {
   const [endingYear, setEndingYear] = useState<number | undefined>();
   const [infoType, setInfoType] = useState<string>("");
   const [data, setData] = useState<DataEntry[]>([]);
+  const [showText, setShowText] = useState<boolean | undefined>();
+  const [gifState, setGifState] = useState<boolean | undefined>(false);
 
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setState(e.target.value);
@@ -71,10 +49,18 @@ export default function Statistics() {
   );
 
   const handleSubmit = () => {
-    if (!state || !district || !parameter || !startingYear || !endingYear || !infoType) {
+    if (
+      !state ||
+      !district ||
+      !parameter ||
+      !startingYear ||
+      !endingYear ||
+      !infoType
+    ) {
       alert("Please fill all the fields.");
       return;
     }
+    setGifState(true);
     console.log(state, district, parameter, startingYear, endingYear, infoType);
     axios
       .get("http://localhost:8080/api/statistics", {
@@ -90,19 +76,39 @@ export default function Statistics() {
       .then((res) => {
         setData(res.data.data);
         console.log(res.data.data);
+        setGifState(false);
+        setShowText(true);
       })
       .catch((err) => {
         console.error(err);
       });
   };
 
+  const exportToCSV = () => {
+    if (!data || data.length === 0) return;
+
+    const headers = Object.keys(data[0]).join(",");
+    const rows = data.map((row) => Object.values(row).join(",")).join("\n");
+    const csvContent = `data:text/csv;charset=utf-8,${headers}\n${rows}`;
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute(
+      "download",
+      `${state}-${district}-${parameter}-${startingYear}-${endingYear}-${infoType}.csv`
+    );
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
-      <Navbar />
-      <div className="flex flex-col items-center justify-between lg:p-24">
-        <h1 className="mt-24 text-3xl font-bold">Mean Values</h1>
+      <div className="flex flex-col items-center justify-between">
+        <h1 className="mt-12 text-3xl font-bold">Mean Values</h1>
         <div className="filtersection lg:w-3/5 h-full mt-16">
-          <div className="lg:grid lg:grid-cols-3 flex flex-col justify-center items-center gap-4">
+          <div className="lg:grid lg:grid-cols-3 flex flex-col justify-center items-center gap-4 ">
             <Dropdown
               label="State"
               options={states}
@@ -134,7 +140,7 @@ export default function Statistics() {
               onChange={handleEndingYearChange}
             />
             <Dropdown
-              label="Select an Info Type"
+              label="Info Type"
               options={infoTypes}
               value={infoType}
               onChange={(e) => setInfoType(e.target.value)}
@@ -142,16 +148,36 @@ export default function Statistics() {
           </div>
           <div className="w-full h-12 m-4 flex justify-center">
             <button
-              className="w-1/5 h-full bg-blue-500 text-white rounded-md"
+              className="w-1/5 h-full bg-blue-500 text-white rounded-md hover:bg-[#159AB2] "
               onClick={handleSubmit}
             >
               Submit
             </button>
           </div>
         </div>
-        <div className="output w-3/4 lg:w-3/5 h-96 m-8 bg-gray-200 p-4 overflow-scroll">
-          {data.length > 0 ? <DataTable data={data} /> : <p>No data available</p>}
+        <div className="output w-3/4 lg:w-3/5 h-96 mx-8 p-4 overflow-scroll no-scrollbar">
+          {showText && (
+            <span className="chartInfo w-full h-10 my-12 lg:my-2 text-lg text-black flex items-center justify-center text-center">
+              {infoType} for {state}, {district} over {parameter} from{" "}
+              {startingYear} to {endingYear}
+            </span>
+          )}
+          {gifState ? (
+            <Image src={preloader} alt="Loading..." className="mx-auto" />
+          ) : data.length > 0 ? (
+            showText && <DataTable data={data} />
+          ) : (
+            showText && <p>No data available</p>
+          )}{" "}
         </div>
+        { showText && <div className="flex justify-center">
+          <button
+            onClick={exportToCSV}
+            className="my-4 p-2 bg-blue-500 text-white rounded"
+          >
+            Export to CSV
+          </button>
+        </div>}
       </div>
     </>
   );
