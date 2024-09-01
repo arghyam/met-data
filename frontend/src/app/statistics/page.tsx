@@ -63,7 +63,7 @@ export default function Statistics() {
     setGifState(true);
     console.log(state, district, parameter, startingYear, endingYear, infoType);
     axios
-      .get("http://localhost:8080/api/statistics", {
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/statistics`, {
         params: {
           state,
           district,

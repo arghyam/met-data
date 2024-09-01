@@ -55,7 +55,7 @@ export default function Visualizations() {
       return;
     }
     axios
-      .get("http://localhost:8080/api/visualizations", {
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/visualizations`, {
         params: {
           state,
           district,
