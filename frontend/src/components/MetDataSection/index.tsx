@@ -10,7 +10,7 @@ export default function MetDataSection() {
           <h1 className="mb-4 text-3xl font-extrabold leading-none tracking-normal text-white md:text-4xl lg:text-4xl">
             Met Data
           </h1>
-          <p className="mb-6 text-justify font-normal text-white lg:text-xl leading-7">
+          <p className="mb-6 text-justify font-light text-white lg:text-xl leading-7">
             The India Water Portal serves as a treasure of information, housing meteorological datasets for all districts of India
             spanning over the 20th Century (1901-2002). This rich resource, encompassing 13 crucial climate parameters, offers 
             invaluable insights for researchers, water resource managers, and anyone interested in understanding India&apos;s 
