@@ -12,7 +12,7 @@ const navigationItems = [
   { label: "Statistics", href: "/statistics" },
   {
     label: "Exit",
-    href: "https://www.indiawaterportal.org/articles/background-meteorological-datasets",
+    href: "https://www.indiawaterportal.org",
   },
 ];
 
