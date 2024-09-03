@@ -19,13 +19,13 @@ export default function InfoCard({
   altText,
 }: InfoCardProps) {
   return (
-    <div className="max-w-sm bg-white border border-gray-400 rounded-lg shadow transition-transform transform hover:scale-105 dark:bg-gray-800 dark:border-gray-700">
+    <div className="max-w-sm bg-white  rounded-lg shadow transition-transform transform hover:scale-105 dark:bg-gray-800 dark:border-gray-700">
       <div className="lg:h-80 bg-white">
         <Link href={link}>
           <Image
             src={image}
             alt={altText}
-            className="rounded-t-lg object-cover w-full h-full"
+            className="rounded-t-lg object-contain w-full h-full"
           />
         </Link>
       </div>

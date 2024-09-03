@@ -1,69 +1,65 @@
-import db from '../db/config.js';
+import db from "../db/config.js";
 
 const Mean = (req, res) => {
-    const state = req.query.state;
-    const district = req.query.district;
-    const parameter = req.query.parameter;
-    const start = req.query.startingYear;
-    const end = req.query.endingYear;
-    const info = req.query.infoType;
-    
-    console.log(state, district, parameter, start, end, info);
+  const state = req.query.state;
+  const district = req.query.district;
+  const parameter = req.query.parameter;
+  const start = req.query.startingYear;
+  const end = req.query.endingYear;
+  const info = req.query.infoType;
 
-    let sql = '';
-    let values = [state, district, start, end];
+  console.log(state, district, parameter, start, end, info);
 
-    if (info === 'Annual_Mean') {
-        sql = `
+  let sql = "";
+  let values = [state, district, start, end];
+
+  if (info === "Annual_Mean") {
+    sql = `
             SELECT state, district, year, 
-            (january + february + march + april + may + june + july + august + september + october + november + december) / 12 AS annual_mean
+            (january + february + march + april + may + june + july + august + september + october + november + december) / 12 AS ${info}
             FROM public.${parameter}
             WHERE state = $1 AND district = $2 AND year >= $3 AND year <= $4
             ORDER BY year;
         `;
-    } 
-    else if (info === 'Monthly_Mean') {
-        sql = `
+  } else if (info === "Monthly_Mean") {
+    sql = `
             SELECT state, district,
-            AVG(january) AS avg_january,
-            AVG(february) AS avg_february,
-            AVG(march) AS avg_march,
-            AVG(april) AS avg_april,
-            AVG(may) AS avg_may,
-            AVG(june) AS avg_june,
-            AVG(july) AS avg_july,
-            AVG(august) AS avg_august,
-            AVG(september) AS avg_september,
-            AVG(october) AS avg_october,
-            AVG(november) AS avg_november,
-            AVG(december) AS avg_december
+            AVG(january) AS Avg_January,
+            AVG(february) AS Avg_February,
+            AVG(march) AS Avg_March,
+            AVG(april) AS Avg_April,
+            AVG(may) AS Avg_May,
+            AVG(june) AS Avg_June,
+            AVG(july) AS Avg_July,
+            AVG(august) AS Avg_August,
+            AVG(september) AS Avg_September,
+            AVG(october) AS Avg_October,
+            AVG(november) AS Avg_November,
+            AVG(december) AS Avg_December
             FROM public.${parameter}
             WHERE state = $1 AND district = $2 AND year >= $3 AND year <= $4
             GROUP BY state, district
             ORDER BY state, district;
         `;
-    } 
-    else if (info === 'Annual_Total') {
-        sql = `
+  } else if (info === "Annual_Total") {
+    sql = `
             SELECT state, district, year, 
-            (january + february + march + april + may + june + july + august + september + october + november + december) AS annual_total
+            (january + february + march + april + may + june + july + august + september + october + november + december) AS ${info}
             FROM public.${parameter}
             WHERE state = $1 AND district = $2 AND year >= $3 AND year <= $4
             ORDER BY year;
         `;
-    } 
-    else {
-        return res.json({ error: 'Invalid infoType' });
-    }
+  } else {
+    return res.json({ error: "Invalid infoType" });
+  }
 
-    db.query(sql, values, (err, result) => {
-        if (err) {
-            return res.json({ error: err.message });
-        }
-        // Ensure the result is an array of objects
-        const data = result.rows;
-        return res.json({ data });
-    });
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      return res.json({ error: err.message });
+    }
+    const data = result.rows;
+    return res.json({ data });
+  });
 };
 
 export default { Mean };
