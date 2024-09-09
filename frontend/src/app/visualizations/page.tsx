@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState, useEffect, useRef, ChangeEvent } from "react";
 import { toPng } from "html-to-image";
 import Image from "next/image";
 import LineChart from "@/components/TrendPlot";
@@ -10,7 +10,6 @@ import preLoader from "../../../public/media/preLoader.gif";
 import { states, districts, parameters } from "../../../Data";
 
 type StateKey = keyof typeof districts;
-type ExportType = "png" | "svg";
 
 export default function Visualizations() {
   const [state, setState] = useState<string>("");
@@ -22,6 +21,8 @@ export default function Visualizations() {
   const [showText, setShowText] = useState<boolean | undefined>();
   const [data, setData] = useState<any | undefined>();
   const [gifState, setGifState] = useState<boolean | undefined>(false);
+
+  const chartRef = useRef<HTMLDivElement>(null);
 
   const handleStateChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setState(event.target.value);
@@ -91,6 +92,27 @@ export default function Visualizations() {
     }
   };
 
+  const yearOptions = Array.from({ length: 103 }, (_, i) =>
+    (1900 + i).toString()
+  );
+
+  const filteredYearOptions = startingYear
+    ? yearOptions.filter((year) => parseInt(year) >= startingYear)
+    : yearOptions;
+
+  useEffect(() => {
+    if (!gifState && chartRef.current) {
+      chartRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [gifState]);
+
+  const convertToNormalWords = (str: string) => {
+    return str
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   return (
     <div>
       <div
@@ -109,35 +131,41 @@ export default function Visualizations() {
             />
             <Dropdown
               label=" District"
-              options={state ? districts[state as StateKey] : []}
+              options={
+                state
+                  ? [...districts[state as StateKey]].sort((a, b) =>
+                      a.localeCompare(b)
+                    )
+                  : []
+              }
               value={district}
               onChange={(e) => setDistrict(e.target.value)}
             />
             <Dropdown
               label="Parameter"
-              options={parameters}
+              options={parameters
+                .map(convertToNormalWords)
+                .sort((a, b) => a.localeCompare(b))}
               value={parameter}
               onChange={(e) => setParameter(e.target.value)}
             />
             <Dropdown
               label="Starting Year"
-              options={Array.from({ length: 103 }, (_, i) =>
-                (1900 + i).toString()
-              )}
+              options={yearOptions}
               value={startingYear?.toString() || ""}
               onChange={(e) => setStartingYear(parseInt(e.target.value))}
             />
             <Dropdown
               label="Ending Year"
-              options={Array.from({ length: 103 }, (_, i) =>
-                (1900 + i).toString()
-              )}
+              options={filteredYearOptions}
               value={endingYear?.toString() || ""}
               onChange={handleEndingYearChange}
             />
             <Dropdown
               label="Info Type"
-              options={["trend_plot"]}
+              options={["trend_plot"]
+                .map(convertToNormalWords)
+                .sort((a, b) => a.localeCompare(b))}
               value={infoType}
               onChange={(e) => setInfoType(e.target.value)}
             />
@@ -159,18 +187,32 @@ export default function Visualizations() {
         </span>
       )}
       <div className="w-[90%] lg:w-3/5 h-full ml-auto mr-auto p-8 overflow-scroll no-scrollbar">
-        <div className="chartArea w-full h-full flex flex-col items-center">
+        <div
+          ref={chartRef}
+          className="chartArea w-full h-full flex flex-col items-center"
+        >
           {gifState ? (
             <Image src={preLoader} alt="Loading..." className="" />
           ) : (
             showText && (
               <>
-                <div className="plot flex justify-center h-full bg-gray-200 hidden md:block">
+                <div className="plot flex justify-center h-full bg-gray-200 hidden lg:block">
                   <div className="overflow-x-auto">
                     <LineChart
                       data={data}
                       width={900}
                       height={400}
+                      xLabel={"Years"}
+                      yLabel={parameter}
+                    />
+                  </div>
+                </div>
+                <div className="plot flex justify-center h-full bg-gray-200 hidden md:block lg:hidden">
+                  <div className="overflow-x-auto">
+                    <LineChart
+                      data={data}
+                      width={600}
+                      height={300}
                       xLabel={"Years"}
                       yLabel={parameter}
                     />

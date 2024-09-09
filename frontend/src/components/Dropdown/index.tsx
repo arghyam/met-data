@@ -21,7 +21,16 @@ const Dropdown = ({ label, options, value, onChange }: DropdownProps) => (
         Select {label}
       </option>
       {options.map((option) => (
-        <option key={option} value={option} className="bg-gray-100 text-black">
+        <option
+          key={option}
+          value={option}
+          className={`bg-gray-100 text-black ${
+            label !== "Starting Year" && label !== "Ending Year"
+              ? "text-left"
+              : ""
+          }`}
+        >
+          {" "}
           {option}
         </option>
       ))}

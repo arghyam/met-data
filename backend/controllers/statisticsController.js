@@ -1,27 +1,36 @@
 import db from "../db/config.js";
 
 const Mean = (req, res) => {
+
+  const toSnakeCase = (str) => {
+    return str
+      .split(' ')
+      .map(word => word.toLowerCase())
+      .join('_');
+  };
+
+
   const state = req.query.state;
   const district = req.query.district;
-  const parameter = req.query.parameter;
+  const parameter = toSnakeCase(req.query.parameter);
   const start = req.query.startingYear;
   const end = req.query.endingYear;
-  const info = req.query.infoType;
+  const info = toSnakeCase(req.query.infoType);
 
   console.log(state, district, parameter, start, end, info);
 
   let sql = "";
   let values = [state, district, start, end];
 
-  if (info === "Annual_Mean") {
+  if (info === "annual_mean") {
     sql = `
             SELECT state, district, year, 
-            (january + february + march + april + may + june + july + august + september + october + november + december) / 12 AS ${info}
+            (january + february + march + april + may + june + july + august + september + october + november + december) / 12 AS ${"Annual_Mean"}
             FROM public.${parameter}
             WHERE state = $1 AND district = $2 AND year >= $3 AND year <= $4
             ORDER BY year;
         `;
-  } else if (info === "Monthly_Mean") {
+  } else if (info === "monthly_mean") {
     sql = `
             SELECT state, district,
             AVG(january) AS Avg_January,
@@ -41,10 +50,10 @@ const Mean = (req, res) => {
             GROUP BY state, district
             ORDER BY state, district;
         `;
-  } else if (info === "Annual_Total") {
+  } else if (info === "annual_total") {
     sql = `
             SELECT state, district, year, 
-            (january + february + march + april + may + june + july + august + september + october + november + december) AS ${info}
+            (january + february + march + april + may + june + july + august + september + october + november + december) AS ${"Annual_Total"}
             FROM public.${parameter}
             WHERE state = $1 AND district = $2 AND year >= $3 AND year <= $4
             ORDER BY year;
