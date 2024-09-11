@@ -101,10 +101,10 @@ export default function Visualizations() {
     : yearOptions;
 
   useEffect(() => {
-    if (!gifState && chartRef.current) {
+    if (showText && chartRef.current) {
       chartRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [gifState]);
+  }, [showText]);
 
   const convertToNormalWords = (str: string) => {
     return str
@@ -180,7 +180,7 @@ export default function Visualizations() {
           </div>
         </div>
       </div>
-      {showText && (
+      {showText && !gifState && (
         <span className="chartInfo w-full h-10 my-12 lg:my-2 text-lg text-black flex items-center justify-center text-center">
           Annual average trend for {state}, {district} over {parameter} from{" "}
           {startingYear} to {endingYear}
@@ -192,7 +192,10 @@ export default function Visualizations() {
           className="chartArea w-full h-full flex flex-col items-center"
         >
           {gifState ? (
-            <Image src={preLoader} alt="Loading..." className="" />
+            <>
+              <span className="chartInfo w-full h-10 my-12 lg:my-2 text-lg text-black flex items-center justify-center text-center"> Loading the visualizations... </span>
+              <Image src={preLoader} alt="Loading..." className="" />
+            </>
           ) : (
             showText && (
               <>
