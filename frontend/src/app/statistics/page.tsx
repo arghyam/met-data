@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState, useRef, useEffect, ChangeEvent } from "react";
 import { states, districts, parameters, infoTypes } from "../../../Data";
 import preloader from "../../../public/media/preLoader.gif";
 import axios from "axios";
 import Image from "next/image";
 import DataTable from "@/components/Datatable";
 import Dropdown from "@/components/Dropdown";
-import { setgid } from "process";
 
 type StateKey = keyof typeof districts;
 
@@ -28,6 +27,8 @@ export default function Statistics() {
   const [data, setData] = useState<DataEntry[]>([]);
   const [showText, setShowText] = useState<boolean | undefined>();
   const [gifState, setGifState] = useState<boolean | undefined>(false);
+
+  const tableRef = useRef<HTMLDivElement>(null);
 
   const handleStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setState(e.target.value);
@@ -103,6 +104,23 @@ export default function Statistics() {
     document.body.removeChild(link);
   };
 
+  const filteredYearOptions = startingYear
+    ? yearOptions.filter((year) => parseInt(year) >= startingYear)
+    : yearOptions;
+
+  useEffect(() => {
+    if (showText && tableRef.current) {
+      tableRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [showText]);
+
+  const convertToNormalWords = (str: string) => {
+    return str
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-between">
@@ -117,13 +135,19 @@ export default function Statistics() {
             />
             <Dropdown
               label="District"
-              options={state ? districts[state as StateKey] : []}
+              options={
+                state
+                  ? [...districts[state as StateKey]].sort((a, b) =>
+                      a.localeCompare(b)
+                    )
+                  : []
+              }
               value={district}
               onChange={(e) => setDistrict(e.target.value)}
             />
             <Dropdown
               label="Parameter"
-              options={parameters}
+              options={parameters.map(convertToNormalWords).sort((a, b) => a.localeCompare(b))}
               value={parameter}
               onChange={(e) => setParameter(e.target.value)}
             />
@@ -135,13 +159,13 @@ export default function Statistics() {
             />
             <Dropdown
               label="Ending Year"
-              options={yearOptions}
+              options={filteredYearOptions}
               value={endingYear?.toString() || ""}
               onChange={handleEndingYearChange}
             />
             <Dropdown
               label="Info Type"
-              options={infoTypes}
+              options={infoTypes.map(convertToNormalWords).sort((a, b) => a.localeCompare(b))}
               value={infoType}
               onChange={(e) => setInfoType(e.target.value)}
             />
@@ -155,7 +179,10 @@ export default function Statistics() {
             </button>
           </div>
         </div>
-        <div className="output w-3/4 lg:w-3/5 h-96 mx-8 p-4 overflow-scroll no-scrollbar">
+        <div
+          ref={tableRef}
+          className="output w-3/4 lg:w-3/5 h-96 mx-8 p-4 overflow-scroll no-scrollbar"
+        >
           {showText && (
             <span className="chartInfo w-full h-10 my-12 lg:my-2 text-lg text-black flex items-center justify-center text-center">
               {infoType} for {state}, {district} over {parameter} from{" "}
@@ -170,14 +197,16 @@ export default function Statistics() {
             showText && <p>No data available</p>
           )}{" "}
         </div>
-        { showText && <div className="flex justify-center">
-          <button
-            onClick={exportToCSV}
-            className="my-4 p-2 bg-blue-500 text-white rounded"
-          >
-            Export to CSV
-          </button>
-        </div>}
+        {showText && (
+          <div className="flex justify-center">
+            <button
+              onClick={exportToCSV}
+              className="my-4 p-2 bg-blue-500 text-white rounded"
+            >
+              Export to CSV
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

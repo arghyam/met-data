@@ -18,8 +18,8 @@ const LineChart: React.FC<LineChartProps> = ({ data = [], width, height, xLabel,
   const svgRef = useRef<SVGSVGElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
-  const yearVals = data.map(item => item.year);
-  const values = data.map(item => item.value);
+  const yearVals = data?.map(item => item.year);
+  const values = data?.map(item => item.value);
 
   useEffect(() => {
     if (data.length === 0) return; 
