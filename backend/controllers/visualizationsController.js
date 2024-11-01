@@ -1,12 +1,6 @@
 import db from "../db/config.js";
 import { getCache, setCache } from "../utils/redis.js";
-
-const toSnakeCase = (str) => {
-  return str
-    .split(" ")
-    .map((word) => word.toLowerCase())
-    .join("_");
-};
+import { toSnakeCase, calculateTrendPlot } from "../utils/calculations.js";
 
 const Plot = async (req, res) => {
   const state = req.query.state;
@@ -56,25 +50,14 @@ const Plot = async (req, res) => {
       await setCache(req.redisClient, cacheKey, plotdata);
     }
 
-    const filteredData = plotdata
-      .filter(
-        (item) =>
-          item.state === state &&
-          item.district === district &&
-          item.year >= start &&
-          item.year <= end
-      )
-      .map((item) => {
-        const monthlyValues = Object.values(item.values);
-        const mean =
-          monthlyValues.reduce((sum, value) => sum + value, 0) /
-          monthlyValues.length;
-        return {
-          year: item.year,
-          value: mean,
-        };
-      });
-
+    const filteredData = calculateTrendPlot(
+      plotdata,
+      state,
+      district,
+      start,
+      end,
+      req.query.infoType
+    );
     res.json(filteredData);
   } catch (err) {
     console.error("Error:", err);
