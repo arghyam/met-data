@@ -1,74 +1,69 @@
 import db from "../db/config.js";
+import { getCache, setCache } from "../utils/redis.js";
+import { calculateMeans, toSnakeCase } from "../utils/calculations.js";
 
-const Mean = (req, res) => {
-
-  const toSnakeCase = (str) => {
-    return str
-      .split(' ')
-      .map(word => word.toLowerCase())
-      .join('_');
-  };
-
-
+const Mean = async (req, res) => {
   const state = req.query.state;
   const district = req.query.district;
-  const parameter = toSnakeCase(req.query.parameter);
-  const start = req.query.startingYear;
-  const end = req.query.endingYear;
+  let parameter = toSnakeCase(req.query.parameter);
+  const start = parseInt(req.query.startingYear, 10);
+  const end = parseInt(req.query.endingYear, 10);
   const info = toSnakeCase(req.query.infoType);
-
+  const cacheKey = `${parameter}`;
+  if (parameter === "reference_crop_evapotranspiration") {
+    parameter = "reference_crop_evapotranspirati";
+  }
   console.log(state, district, parameter, start, end, info);
 
-  let sql = "";
-  let values = [state, district, start, end];
+  try {
+    let plotdata = await getCache(req.redisClient, cacheKey);
 
-  if (info === "annual_mean") {
-    sql = `
-            SELECT state, district, year, 
-            (january + february + march + april + may + june + july + august + september + october + november + december) / 12 AS ${"Annual_Mean"}
-            FROM public.${parameter}
-            WHERE state = $1 AND district = $2 AND year >= $3 AND year <= $4
-            ORDER BY year;
-        `;
-  } else if (info === "monthly_mean") {
-    sql = `
-            SELECT state, district,
-            AVG(january) AS Avg_January,
-            AVG(february) AS Avg_February,
-            AVG(march) AS Avg_March,
-            AVG(april) AS Avg_April,
-            AVG(may) AS Avg_May,
-            AVG(june) AS Avg_June,
-            AVG(july) AS Avg_July,
-            AVG(august) AS Avg_August,
-            AVG(september) AS Avg_September,
-            AVG(october) AS Avg_October,
-            AVG(november) AS Avg_November,
-            AVG(december) AS Avg_December
-            FROM public.${parameter}
-            WHERE state = $1 AND district = $2 AND year >= $3 AND year <= $4
-            GROUP BY state, district
-            ORDER BY state, district;
-        `;
-  } else if (info === "annual_total") {
-    sql = `
-            SELECT state, district, year, 
-            (january + february + march + april + may + june + july + august + september + october + november + december) AS ${"Annual_Total"}
-            FROM public.${parameter}
-            WHERE state = $1 AND district = $2 AND year >= $3 AND year <= $4
-            ORDER BY year;
-        `;
-  } else {
-    return res.json({ error: "Invalid infoType" });
-  }
+    if (!plotdata) {
+      const sql = `
+        SELECT year, state, district, january, february, march, april, may, june, july, august, september, october, november, december
+        FROM public.${parameter}
+        ORDER BY year;
+      `;
 
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      return res.json({ error: err.message });
+      const result = await new Promise((resolve, reject) => {
+        db.query(sql, (err, result) => {
+          if (err) reject(err);
+          else resolve(result);
+        });
+      });
+
+      plotdata = result.rows.map((row) => ({
+        year: row.year,
+        state: row.state,
+        district: row.district,
+        values: {
+          january: row.january,
+          february: row.february,
+          march: row.march,
+          april: row.april,
+          may: row.may,
+          june: row.june,
+          july: row.july,
+          august: row.august,
+          september: row.september,
+          october: row.october,
+          november: row.november,
+          december: row.december,
+        },
+      }));
+
+      await setCache(req.redisClient, cacheKey, plotdata);
     }
-    const data = result.rows;
+
+    // console.log("Plotdata fetched:", plotdata);
+
+    const data = calculateMeans(plotdata, state, district, start, end, info);
+    // console.log("Calculated data:", data);
     return res.json({ data });
-  });
+  } catch (err) {
+    console.error("Error:", err);
+    return res.json({ error: err.message });
+  }
 };
 
 export default { Mean };

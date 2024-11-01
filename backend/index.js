@@ -3,27 +3,10 @@ import cors from 'cors';
 import pool from './db/config.js';
 import statisticsRoute from './routes/statisticsRoute.js';
 import visualizationsRoute from './routes/visualizationsRoute.js';
-import { createClient } from 'redis';
+import { initializeRedis, redisClient } from './utils/redis.js';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-
-const redisClient = createClient({
-    url: 'redis://127.0.0.1:6379'
-});
-
-async function initializeRedis() {
-    try {
-        await redisClient.connect();
-        console.log('Connected to Redis');
-    } catch (err) {
-        console.error('Error connecting to Redis:', err);
-    }
-}
-
-redisClient.on('error', (err) => {
-    console.error('Redis error:', err);
-});
 
 initializeRedis();
 
@@ -58,6 +41,7 @@ pool.connect((err, client, release) => {
     }
 });
 
+// Attach Redis client to each request
 app.use((req, res, next) => {
     req.redisClient = redisClient;
     next();

@@ -1,42 +1,68 @@
 import db from "../db/config.js";
+import { getCache, setCache } from "../utils/redis.js";
+import { toSnakeCase, calculateTrendPlot } from "../utils/calculations.js";
 
-const Plot = (req, res) => {
-    const toSnakeCase = (str) => {
-        return str
-          .split(' ')
-          .map(word => word.toLowerCase())
-          .join('_');
-      };
+const Plot = async (req, res) => {
+  const state = req.query.state;
+  const district = req.query.district;
+  const parameter = toSnakeCase(req.query.parameter);
+  const start = parseInt(req.query.startingYear, 10);
+  const end = parseInt(req.query.endingYear, 10);
+  const cacheKey = `plotdata:${parameter}`;
 
-    const state = req.query.state;
-    const district = req.query.district;
-    const parameter = toSnakeCase(req.query.parameter);
-    const start = req.query.startingYear;
-    const end = req.query.endingYear;
-    const info = toSnakeCase(req.query.infoType);
-    console.log(state, district, parameter, start, end, info);
+  try {
+    let plotdata = await getCache(req.redisClient, cacheKey);
 
-    let sql = "";
-    let values = [state, district, start, end];
-    if (info == "trend_plot") {
-        sql = `
-            SELECT year, (january + february + march + april + may + june + july + august + september + october + november + december) / 12 AS value
-            FROM public.${parameter}
-            WHERE state = $1 AND district = $2 AND year >= $3 AND year <= $4
-            ORDER BY year;
-        `;
+    if (!plotdata) {
+      const sql = `
+                SELECT year, state, district, january, february, march, april, may, june, july, august, september, october, november, december
+                FROM public.${parameter}
+                ORDER BY year;
+            `;
 
-        db.query(sql, values, (err, result) => {
-            if (err) {
-                return res.json({ error: "An error occurred" });
-            }
-            const plotdata = result.rows.map((row) => ({
-                year: row.year,
-                value: row.value,
-            }));
-            res.json(plotdata);
+      const result = await new Promise((resolve, reject) => {
+        db.query(sql, (err, result) => {
+          if (err) reject(err);
+          else resolve(result);
         });
+      });
+
+      plotdata = result.rows.map((row) => ({
+        year: row.year,
+        state: row.state,
+        district: row.district,
+        values: {
+          january: row.january,
+          february: row.february,
+          march: row.march,
+          april: row.april,
+          may: row.may,
+          june: row.june,
+          july: row.july,
+          august: row.august,
+          september: row.september,
+          october: row.october,
+          november: row.november,
+          december: row.december,
+        },
+      }));
+
+      await setCache(req.redisClient, cacheKey, plotdata);
     }
+
+    const filteredData = calculateTrendPlot(
+      plotdata,
+      state,
+      district,
+      start,
+      end,
+      req.query.infoType
+    );
+    res.json(filteredData);
+  } catch (err) {
+    console.error("Error:", err);
+    res.json({ error: "An error occurred" });
+  }
 };
 
 export default { Plot };
