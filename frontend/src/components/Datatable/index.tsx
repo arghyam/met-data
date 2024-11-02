@@ -23,7 +23,6 @@ const DataTable: React.FC<DataTableProps> = ({ data }) => {
                 <th key={key} className="border border-gray-300 p-2">
                   {key
                     .toUpperCase()
-                    .replace(/AVG_/g, "Average ")
                     .replace(/ANNUAL_/g, "ANNUAL ")}
                 </th>
               ))}

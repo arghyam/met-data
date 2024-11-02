@@ -63,8 +63,7 @@ export const calculateMeans = (plotdata, state, district, start, end, info) => {
     months.forEach((month) => {
       const total = filteredData
         .reduce((sum, item) => sum + item.values[month], 0)
-        .toFixed(5);
-      monthlyMeans[`avg_${month}`] = total / filteredData.length;
+      monthlyMeans[`${month}`] = (total / filteredData.length).toFixed(5);;
     });
 
     const result = [

@@ -739,3 +739,17 @@ export const parameters = [
   "vapour_pressure",
   "wet_day_frequency"
 ];
+
+export const units = {
+  "precipitation" : "mm/month",
+  "maximum_temperature" : "°C",
+  "minimum_temperature" : "°C",
+  "diurnal_temperature_range" : "°C",
+  "average_temperature" : "°C",
+  "cloud_cover" : "% (oktas 1/8th)",
+  "vapour_pressure" : "hPa",
+  "ground_frost_frequency" : "days/month",
+  "potential_evapotranspiration" : "mm/day",
+  "reference_crop_evapotranspiration" : "mm/day",
+  "wet_day_frequency" : "days/month"
+};
