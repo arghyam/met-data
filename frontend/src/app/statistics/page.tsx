@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect, ChangeEvent } from "react";
-import { states, districts, parameters, infoTypes } from "../../../Data";
+import {
+  states,
+  districts,
+  parameters,
+  infoTypes,
+  units,
+  UnitKey,
+} from "../../../Data";
 import preloader from "../../../public/media/preLoader.gif";
 import axios from "axios";
 import Image from "next/image";
@@ -63,6 +70,7 @@ export default function Statistics() {
     }
     setGifState(true);
     console.log(state, district, parameter, startingYear, endingYear, infoType);
+    console.log(units[parameter.toLowerCase() as UnitKey]);
     axios
       .get(`${process.env.NEXT_PUBLIC_API_URL}/statistics`, {
         params: {
@@ -79,6 +87,7 @@ export default function Statistics() {
         console.log(res.data.data);
         setGifState(false);
         setShowText(true);
+        debuggerFunction(parameter as UnitKey);
       })
       .catch((err) => {
         console.error(err);
@@ -116,9 +125,14 @@ export default function Statistics() {
 
   const convertToNormalWords = (str: string) => {
     return str
-      .split('_')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  const debuggerFunction = (parameter: any) => {
+    console.log(parameter);
+    console.log(units[parameter as UnitKey]);
   };
 
   return (
@@ -147,7 +161,9 @@ export default function Statistics() {
             />
             <Dropdown
               label="Parameter"
-              options={parameters.map(convertToNormalWords).sort((a, b) => a.localeCompare(b))}
+              options={parameters
+                .map(convertToNormalWords)
+                .sort((a, b) => a.localeCompare(b))}
               value={parameter}
               onChange={(e) => setParameter(e.target.value)}
             />
@@ -165,7 +181,9 @@ export default function Statistics() {
             />
             <Dropdown
               label="Info Type"
-              options={infoTypes.map(convertToNormalWords).sort((a, b) => a.localeCompare(b))}
+              options={infoTypes
+                .map(convertToNormalWords)
+                .sort((a, b) => a.localeCompare(b))}
               value={infoType}
               onChange={(e) => setInfoType(e.target.value)}
             />
@@ -192,7 +210,7 @@ export default function Statistics() {
           {gifState ? (
             <Image src={preloader} alt="Loading..." className="mx-auto" />
           ) : data.length > 0 ? (
-            showText && <DataTable data={data} />
+            showText && <DataTable data={data} parameter={parameter} />
           ) : (
             showText && <p>No data available</p>
           )}{" "}

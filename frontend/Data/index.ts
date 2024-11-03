@@ -1,79 +1,79 @@
-type StateKey = "JAMMU & KASHMIR" |
-  "CHANDIGARH" |
-  "PUNJAB" |
-  "UTTARANCHAL" |
-  "HIMACHAL PRADESH" |
-  "HARYANA" |
-  "MANIPUR" |
-  "MAHARASHTRA"|
-  "RAJASTHAN" |
-  "UTTAR PRADESH" |
-  "DELHI" |
-  "BIHAR" |
-  "SIKKIM" |
-  "ARUNACHAL PRADESH" |
-  "DAMAN & DIU"|
-  "NAGALAND" |
-  "MIZORAM"|
-  "ASSAM"|
-  "TRIPURA"|
-  "MEGHALAYA"|
-  "KERALA"|
-  "PONDICHERRY"|
-  "GOA"|
-  "LAKSHADWEEP"|
-  "WEST BENGAL"|
-  "ORISSA"|
-  "JHARKHAND"|
-  "CHHATTISGARH"|
-  "MADHYA PRADESH"|
-  "ANDAMAN & NICOBAR ISLANDS"|
-  "GUJARAT"|
-  "DADRA & NAGAR HAVELI"|
-  "ANDHRA PRADESH"|
-  "KARNATAKA"|
-  "TAMIL NADU";
+type StateKey =
+  | "JAMMU & KASHMIR"
+  | "CHANDIGARH"
+  | "PUNJAB"
+  | "UTTARANCHAL"
+  | "HIMACHAL PRADESH"
+  | "HARYANA"
+  | "MANIPUR"
+  | "MAHARASHTRA"
+  | "RAJASTHAN"
+  | "UTTAR PRADESH"
+  | "DELHI"
+  | "BIHAR"
+  | "SIKKIM"
+  | "ARUNACHAL PRADESH"
+  | "DAMAN & DIU"
+  | "NAGALAND"
+  | "MIZORAM"
+  | "ASSAM"
+  | "TRIPURA"
+  | "MEGHALAYA"
+  | "KERALA"
+  | "PONDICHERRY"
+  | "GOA"
+  | "LAKSHADWEEP"
+  | "WEST BENGAL"
+  | "ORISSA"
+  | "JHARKHAND"
+  | "CHHATTISGARH"
+  | "MADHYA PRADESH"
+  | "ANDAMAN & NICOBAR ISLANDS"
+  | "GUJARAT"
+  | "DADRA & NAGAR HAVELI"
+  | "ANDHRA PRADESH"
+  | "KARNATAKA"
+  | "TAMIL NADU";
 
-  export const states = [
-    "ANDAMAN & NICOBAR ISLANDS",
-    "ANDHRA PRADESH",
-    "ARUNACHAL PRADESH",
-    "ASSAM",
-    "BIHAR",
-    "CHANDIGARH",
-    "CHHATTISGARH",
-    "DADRA & NAGAR HAVELI",
-    "DAMAN & DIU",
-    "DELHI",
-    "GOA",
-    "GUJARAT",
-    "HARYANA",
-    "HIMACHAL PRADESH",
-    "JAMMU & KASHMIR",
-    "JHARKHAND",
-    "KARNATAKA",
-    "KERALA",
-    "LAKSHADWEEP",
-    "MADHYA PRADESH",
-    "MAHARASHTRA",
-    "MANIPUR",
-    "MEGHALAYA",
-    "MIZORAM",
-    "NAGALAND",
-    "ORISSA",
-    "PONDICHERRY",
-    "PUNJAB",
-    "RAJASTHAN",
-    "SIKKIM",
-    "TAMIL NADU",
-    "TRIPURA",
-    "UTTAR PRADESH",
-    "UTTARANCHAL",
-    "WEST BENGAL"
-  ];
-  
+export const states = [
+  "ANDAMAN & NICOBAR ISLANDS",
+  "ANDHRA PRADESH",
+  "ARUNACHAL PRADESH",
+  "ASSAM",
+  "BIHAR",
+  "CHANDIGARH",
+  "CHHATTISGARH",
+  "DADRA & NAGAR HAVELI",
+  "DAMAN & DIU",
+  "DELHI",
+  "GOA",
+  "GUJARAT",
+  "HARYANA",
+  "HIMACHAL PRADESH",
+  "JAMMU & KASHMIR",
+  "JHARKHAND",
+  "KARNATAKA",
+  "KERALA",
+  "LAKSHADWEEP",
+  "MADHYA PRADESH",
+  "MAHARASHTRA",
+  "MANIPUR",
+  "MEGHALAYA",
+  "MIZORAM",
+  "NAGALAND",
+  "ORISSA",
+  "PONDICHERRY",
+  "PUNJAB",
+  "RAJASTHAN",
+  "SIKKIM",
+  "TAMIL NADU",
+  "TRIPURA",
+  "UTTAR PRADESH",
+  "UTTARANCHAL",
+  "WEST BENGAL",
+];
 
-export const districts: Record<StateKey, string[]>= {
+export const districts: Record<StateKey, string[]> = {
   "JAMMU & KASHMIR": [
     "JAMMU",
     "KATHUA",
@@ -91,9 +91,9 @@ export const districts: Record<StateKey, string[]>= {
     "PUNCH",
   ],
 
-  "CHANDIGARH": ["CHANDIGARH"],
+  CHANDIGARH: ["CHANDIGARH"],
 
-  "PUNJAB": [
+  PUNJAB: [
     "KAPURTHALA",
     "JALANDHAR",
     "NAWANSHAHR",
@@ -113,7 +113,7 @@ export const districts: Record<StateKey, string[]>= {
     "AMRITSAR",
   ],
 
-  "UTTARANCHAL": [
+  UTTARANCHAL: [
     "TEHRI GARHWAL",
     "DEHRADUN",
     "GARHWAL",
@@ -143,7 +143,7 @@ export const districts: Record<StateKey, string[]>= {
     "KANGRA",
   ],
 
-  "HARYANA": [
+  HARYANA: [
     "KARNAL",
     "PANIPAT",
     "YAMUNANAGAR",
@@ -165,7 +165,7 @@ export const districts: Record<StateKey, string[]>= {
     "KAITHAL",
   ],
 
-  "MANIPUR": [
+  MANIPUR: [
     "IMPHAL WEST",
     "CHANDEL",
     "CHURACHANDPUR",
@@ -177,7 +177,7 @@ export const districts: Record<StateKey, string[]>= {
     "TAMENGLONG",
   ],
 
-  "MAHARASHTRA": [
+  MAHARASHTRA: [
     "MUMBAI (SUBURBAN)",
     "MUMBAI",
     "JALGAON",
@@ -215,7 +215,7 @@ export const districts: Record<StateKey, string[]>= {
     "KOLHAPUR",
   ],
 
-  "RAJASTHAN": [
+  RAJASTHAN: [
     "BIKANER",
     "CHURU",
     "SIROHI",
@@ -323,9 +323,9 @@ export const districts: Record<StateKey, string[]>= {
     "SONBHADRA",
   ],
 
-  "DELHI": ["NEW DELHI"],
+  DELHI: ["NEW DELHI"],
 
-  "BIHAR": [
+  BIHAR: [
     "BHAGALPUR",
     "BANKA",
     "BUXAR",
@@ -365,7 +365,7 @@ export const districts: Record<StateKey, string[]>= {
     "GAYA",
   ],
 
-  "SIKKIM": ["NORTH SIKKIM", "EAST SIKKIM", "WEST SIKKIM", "SOUTH SIKKIM"],
+  SIKKIM: ["NORTH SIKKIM", "EAST SIKKIM", "WEST SIKKIM", "SOUTH SIKKIM"],
 
   "ARUNACHAL PRADESH": [
     "UPPER SUBANSIRI",
@@ -383,7 +383,7 @@ export const districts: Record<StateKey, string[]>= {
 
   "DAMAN & DIU": ["DAMAN", "DIU"],
 
-  "NAGALAND": [
+  NAGALAND: [
     "TUENSANG",
     "MOKOKCHUNG",
     "WOKHA",
@@ -393,7 +393,7 @@ export const districts: Record<StateKey, string[]>= {
     "ZUNHEBOTO",
   ],
 
-  "MIZORAM": [
+  MIZORAM: [
     "CHAMPHAI",
     "LUNGLEI",
     "MAMIT",
@@ -403,7 +403,7 @@ export const districts: Record<StateKey, string[]>= {
     "AIZAWL",
   ],
 
-  "ASSAM": [
+  ASSAM: [
     "GOALPARA",
     "NALBARI",
     "DARRANG",
@@ -427,9 +427,9 @@ export const districts: Record<StateKey, string[]>= {
     "DHUBRI",
   ],
 
-  "TRIPURA": ["WEST TRIPURA", "SOUTH TRIPURA", "NORTH TRIPURA", "DHALAI"],
+  TRIPURA: ["WEST TRIPURA", "SOUTH TRIPURA", "NORTH TRIPURA", "DHALAI"],
 
-  "MEGHALAYA": [
+  MEGHALAYA: [
     "WEST GARO HILLS",
     "EAST KHASI HILLS",
     "EAST GARO HILLS",
@@ -437,7 +437,7 @@ export const districts: Record<StateKey, string[]>= {
     "JAINTIA HILLS",
   ],
 
-  "KERALA": [
+  KERALA: [
     "KASARAGOD",
     "ALAPPUZHA",
     "WAYANAD",
@@ -454,11 +454,11 @@ export const districts: Record<StateKey, string[]>= {
     "PATHANAMTHITTA",
   ],
 
-  "PONDICHERRY": ["PONDICHERRY", "KARAIKAL", "YANAM", "MAHE"],
+  PONDICHERRY: ["PONDICHERRY", "KARAIKAL", "YANAM", "MAHE"],
 
-  "GOA": ["NORTH GOA", "SOUTH GOA"],
+  GOA: ["NORTH GOA", "SOUTH GOA"],
 
-  "LAKSHADWEEP": ["LAKSHADWEEP"],
+  LAKSHADWEEP: ["LAKSHADWEEP"],
 
   "WEST BENGAL": [
     "KOCH BIHAR",
@@ -481,7 +481,7 @@ export const districts: Record<StateKey, string[]>= {
     "SOUTH TWENTY FOUR PARGANA",
   ],
 
-  "ORISSA": [
+  ORISSA: [
     "BARGARH",
     "JHARSUGUDA",
     "NAYAGARH",
@@ -514,7 +514,7 @@ export const districts: Record<StateKey, string[]>= {
     "KORAPUT",
   ],
 
-  "JHARKHAND": [
+  JHARKHAND: [
     "LOHARDAGA",
     "DUMKA",
     "DHANBAD",
@@ -535,7 +535,7 @@ export const districts: Record<StateKey, string[]>= {
     "PURBI SINGHBHUM",
   ],
 
-  "CHHATTISGARH": [
+  CHHATTISGARH: [
     "SURGUJA",
     "JASHPUR",
     "KORBA",
@@ -604,7 +604,7 @@ export const districts: Record<StateKey, string[]>= {
 
   "ANDAMAN & NICOBAR ISLANDS": ["NICOBARS", "ANDAMANS"],
 
-  "GUJARAT": [
+  GUJARAT: [
     "KACHCHH",
     "MAHESANA",
     "SURAT",
@@ -660,7 +660,7 @@ export const districts: Record<StateKey, string[]>= {
     "GUNTUR",
   ],
 
-  "KARNATAKA": [
+  KARNATAKA: [
     "UTTARA KANNADA",
     "CHITRADURGA",
     "DAVANAGERE",
@@ -737,19 +737,32 @@ export const parameters = [
   "precipitation",
   "reference_crop_evapotranspiration",
   "vapour_pressure",
-  "wet_day_frequency"
+  "wet_day_frequency",
 ];
 
-export const units = {
-  "precipitation" : "mm/month",
-  "maximum_temperature" : "°C",
-  "minimum_temperature" : "°C",
-  "diurnal_temperature_range" : "°C",
-  "average_temperature" : "°C",
-  "cloud_cover" : "% (oktas 1/8th)",
-  "vapour_pressure" : "hPa",
-  "ground_frost_frequency" : "days/month",
-  "potential_evapotranspiration" : "mm/day",
-  "reference_crop_evapotranspiration" : "mm/day",
-  "wet_day_frequency" : "days/month"
+export type UnitKey =
+  | "precipitation"
+  | "maximum_temperature"
+  | "minimum_temperature"
+  | "diurnal_temperature_range"
+  | "average_temperature"
+  | "cloud_cover"
+  | "vapour_pressure"
+  | "ground_frost_frequency"
+  | "potential_evapotranspiration"
+  | "reference_crop_evapotranspiration"
+  | "wet_day_frequency";
+
+export const units: Record<UnitKey, string> = {
+  precipitation: "mm/month",
+  maximum_temperature: "°C",
+  minimum_temperature: "°C",
+  diurnal_temperature_range: "°C",
+  average_temperature: "°C",
+  cloud_cover: "% (oktas 1/8th)",
+  vapour_pressure: "hPa",
+  ground_frost_frequency: "days/month",
+  potential_evapotranspiration: "mm/day",
+  reference_crop_evapotranspiration: "mm/day",
+  wet_day_frequency: "days/month",
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import { UnitKey, units } from "../../../Data";
 
 interface DataEntry {
   state: string;
@@ -9,9 +9,16 @@ interface DataEntry {
 
 type DataTableProps = {
   data: DataEntry[];
+  parameter: string;
 };
 
-const DataTable: React.FC<DataTableProps> = ({ data }) => {
+const toUnitKeyFormat = (str: string): UnitKey => {
+  return str.toLowerCase().replace(/\s+/g, "_") as UnitKey;
+};
+
+const DataTable: React.FC<DataTableProps> = ({ data, parameter }) => {
+  const lowerCaseParameter = toUnitKeyFormat(parameter);
+
   return (
     <div>
       <table className="min-w-full border-collapse border border-gray-400">
@@ -19,15 +26,20 @@ const DataTable: React.FC<DataTableProps> = ({ data }) => {
           <tr>
             {data &&
               data.length > 0 &&
-              Object.keys(data[0]).map((key) => (
+              Object.keys(data[0]).map((key, index, array) => (
                 <th key={key} className="border border-gray-300 p-2">
                   {key
                     .toUpperCase()
-                    .replace(/ANNUAL_/g, "ANNUAL ")}
+                    .replace(/AVG_/g, "Average ")
+                    .replace(/ANNUAL_/g, "Annual ")}
+                  {index === array.length - 1 && lowerCaseParameter
+                    ? ` (${units[lowerCaseParameter] || "N/A"})`
+                    : ""}
                 </th>
               ))}
           </tr>
         </thead>
+
         <tbody>
           {data &&
             data.length > 0 &&
