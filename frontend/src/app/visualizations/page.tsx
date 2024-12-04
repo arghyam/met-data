@@ -1,13 +1,19 @@
 "use client";
 
 import { useState, useEffect, useRef, ChangeEvent } from "react";
+import {
+  states,
+  districts,
+  parameters,
+  units,
+  UnitKey,
+} from "../../../Data";
 import { toPng } from "html-to-image";
 import Image from "next/image";
 import LineChart from "@/components/TrendPlot";
 import Dropdown from "@/components/Dropdown";
 import axios from "axios";
 import preLoader from "../../../public/media/preLoader.gif";
-import { states, districts, parameters } from "../../../Data";
 
 type StateKey = keyof typeof districts;
 
@@ -43,6 +49,7 @@ export default function Visualizations() {
   const handleSubmit = () => {
     setShowText(true);
     setGifState(true);
+    debuggerFunction();
     console.log(state, district, parameter, startingYear, endingYear, infoType);
     if (
       !state ||
@@ -111,6 +118,15 @@ export default function Visualizations() {
       .split("_")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
+  };
+
+  const unitKey = parameter.toLowerCase() as UnitKey;
+  unitKey.replace(/\s+/g, "_");
+  const unit = units[parameter.toLowerCase().replace(/\s+/g, "_") as UnitKey]
+
+  const debuggerFunction = () => {
+    console.log(unitKey);
+    console.log(unit);
   };
 
   return (
@@ -193,7 +209,10 @@ export default function Visualizations() {
         >
           {gifState ? (
             <>
-              <span className="chartInfo w-full h-10 my-12 lg:my-2 text-lg text-black flex items-center justify-center text-center"> Loading the visualizations... </span>
+              <span className="chartInfo w-full h-10 my-12 lg:my-2 text-lg text-black flex items-center justify-center text-center">
+                {" "}
+                Loading the visualizations...{" "}
+              </span>
               <Image src={preLoader} alt="Loading..." className="" />
             </>
           ) : (
@@ -207,6 +226,7 @@ export default function Visualizations() {
                       height={400}
                       xLabel={"Years"}
                       yLabel={parameter}
+                      unit={unit}
                     />
                   </div>
                 </div>
@@ -218,6 +238,7 @@ export default function Visualizations() {
                       height={300}
                       xLabel={"Years"}
                       yLabel={parameter}
+                      unit={unit}
                     />
                   </div>
                 </div>
@@ -229,7 +250,9 @@ export default function Visualizations() {
                       height={200}
                       xLabel={"Years"}
                       yLabel={parameter}
+                      unit={unit}
                     />
+                    s
                   </div>
                 </div>
                 <button

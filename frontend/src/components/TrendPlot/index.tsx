@@ -12,9 +12,10 @@ interface LineChartProps {
   height: number;
   xLabel: string;
   yLabel: string;
+  unit: string;
 }
 
-const LineChart: React.FC<LineChartProps> = ({ data = [], width, height, xLabel, yLabel }) => {
+const LineChart: React.FC<LineChartProps> = ({ data = [], width, height, xLabel, yLabel, unit }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
@@ -52,8 +53,6 @@ const LineChart: React.FC<LineChartProps> = ({ data = [], width, height, xLabel,
       .attr('transform', 'rotate(-45)')
       .style('text-anchor', 'end');
 
-    
-
     svg.append('g')
       .attr('transform', `translate(${margin.left},0)`)
       .call(d3.axisLeft(y));
@@ -77,7 +76,7 @@ const LineChart: React.FC<LineChartProps> = ({ data = [], width, height, xLabel,
       .attr('transform', `rotate(-90)`)
       .attr('x', -height / 2)
       .attr('y', 15)
-      .text(yLabel)
+      .text(`${yLabel} (${unit})`)
       .style('font-size', '12px');
 
     svg.selectAll('.dot')
@@ -93,13 +92,13 @@ const LineChart: React.FC<LineChartProps> = ({ data = [], width, height, xLabel,
         tooltip.style('display', 'block')
           .style('left', `${event.pageX + 5}px`)
           .style('top', `${event.pageY - 28}px`)
-          .html(`Year: ${d.year}<br/>Value: ${d.value.toFixed(2)}`);
+          .html(`Year: ${d.year}<br/>Value: ${d.value.toFixed(2)} ${unit}`);
       })
       .on('mouseout', () => {
         tooltip.style('display', 'none');
       });
 
-  }, [data, yearVals, values, width, height, xLabel, yLabel]);
+  }, [data, yearVals, values, width, height, xLabel, yLabel, unit]);
 
   return (
     <>
