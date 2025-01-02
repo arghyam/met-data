@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 const noto = Noto_Serif({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MET DATA "
+  title: "MET DATA ",
 };
 
 export default function RootLayout({
@@ -18,7 +18,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={noto.className}>
         <Navbar />
-        {children}</body>
+        {children}
+      </body>
     </html>
   );
 }

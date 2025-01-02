@@ -3,39 +3,36 @@ import { ChangeEvent } from "react";
 type DropdownProps = {
   label: string;
   value: string;
-  options: Array<string>;
+  options: string[];
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 };
 
-const Dropdown = ({ label, options, value, onChange }: DropdownProps) => (
-  <div className="w-full m-4 flex flex-col items-center">
-    <div className="w-full items-left">
-      <label className="ml-4 text-left text-[#067A91]">{label}</label>
+function Dropdown({ label, value, options, onChange }: DropdownProps) {
+  return (
+    <div className="w-full my-8 flex flex-col items-center">
+      <div className="w-full text-left text-[#067A91] text-xl font-semibold pl-8">
+        <label className="">{label}</label>
+      </div>
+      <select
+        className="w-full h-16 text-center font-semibold bg-gray-150 rounded-lg hover:bg-[#159AB2] hover:text-white text-xl"
+        value={value}
+        onChange={onChange}
+      >
+        <option value="">Select {label}</option>
+        {options.map((option) => (
+          <option
+            key={option}
+            value={option}
+            className={`bg-gray-200 text-black text-lg ${
+              label !== "Starting Year" && label !== "Ending Year" ? "text-left" : ""
+            }`}
+          >
+            {option}
+          </option>
+        ))}
+      </select>
     </div>
-    <select
-      className="w-[90%] h-12 text-center bg-gray-100 rounded-md hover:bg-[#159AB2] hover:text-white "
-      value={value}
-      onChange={onChange}
-    >
-      <option className="bg-gray-100 text-black" value="">
-        Select {label}
-      </option>
-      {options.map((option) => (
-        <option
-          key={option}
-          value={option}
-          className={`bg-gray-100 text-black ${
-            label !== "Starting Year" && label !== "Ending Year"
-              ? "text-left"
-              : ""
-          }`}
-        >
-          {" "}
-          {option}
-        </option>
-      ))}
-    </select>
-  </div>
-);
+  );
+}
 
 export default Dropdown;
