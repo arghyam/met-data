@@ -20,8 +20,8 @@ const DataTable: React.FC<DataTableProps> = ({ data, parameter }) => {
   const lowerCaseParameter = toUnitKeyFormat(parameter);
 
   return (
-    <div>
-      <table className="min-w-full border-collapse border border-gray-400">
+    <div className={`${data.length > 15 ? "max-h-96 overflow-y-auto" : ""}`}>
+    <table className="min-w-full border-collapse border border-gray-400">
         <thead>
           <tr>
             {data &&

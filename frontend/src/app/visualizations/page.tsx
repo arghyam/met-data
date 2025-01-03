@@ -1,19 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef, ChangeEvent } from "react";
-import {
-  states,
-  districts,
-  parameters,
-  units,
-  UnitKey,
-} from "../../../Data";
+import { states, districts, parameters, units, UnitKey } from "../../../Data";
 import { toPng } from "html-to-image";
 import Image from "next/image";
 import LineChart from "@/components/TrendPlot";
 import Dropdown from "@/components/Dropdown";
 import axios from "axios";
 import preLoader from "../../../public/media/preLoader.gif";
+import Link from "next/link";
 
 type StateKey = keyof typeof districts;
 
@@ -24,7 +19,7 @@ export default function Visualizations() {
   const [startingYear, setStartingYear] = useState<number | undefined>();
   const [endingYear, setEndingYear] = useState<number | undefined>();
   const [infoType, setInfoType] = useState<string>("");
-  const [showText, setShowText] = useState<boolean | undefined>();
+  const [showText, setShowText] = useState<boolean | undefined>(false);
   const [data, setData] = useState<any | undefined>();
   const [gifState, setGifState] = useState<boolean | undefined>(false);
 
@@ -37,7 +32,6 @@ export default function Visualizations() {
 
   const handleEndingYearChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const endingYear = parseInt(event.target.value);
-
     if (startingYear && endingYear < startingYear) {
       alert("Ending year must be greater than or equal to the starting year.");
       setEndingYear(undefined);
@@ -49,8 +43,6 @@ export default function Visualizations() {
   const handleSubmit = () => {
     setShowText(true);
     setGifState(true);
-    debuggerFunction();
-    console.log(state, district, parameter, startingYear, endingYear, infoType);
     if (
       !state ||
       !district ||
@@ -74,7 +66,6 @@ export default function Visualizations() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setData(res.data);
         setGifState(false);
       })
@@ -122,23 +113,27 @@ export default function Visualizations() {
 
   const unitKey = parameter.toLowerCase() as UnitKey;
   unitKey.replace(/\s+/g, "_");
-  const unit = units[parameter.toLowerCase().replace(/\s+/g, "_") as UnitKey]
-
-  const debuggerFunction = () => {
-    console.log(unitKey);
-    console.log(unit);
-  };
+  const unit = units[parameter.toLowerCase().replace(/\s+/g, "_") as UnitKey];
 
   return (
     <div>
+      <div className="flex justify-between items-center p-4">
+        <Link href="/" legacyBehavior>
+          <a className="text-black text-3xl font-bold hover:underline ml-40">
+            Back
+          </a>
+        </Link>
+        <Link href="/statistics" legacyBehavior>
+          <a className="text-black text-3xl font-bold hover:underline mr-40">
+            Explore Statistics
+          </a>
+        </Link>
+      </div>
       <div
-        className={`flex flex-col items-center justify-between ${
-          !showText && `lg:pd-16`
-        } lg:px-16 `}
+        className={`flex flex-col items-center justify-between lg:px-16`}
       >
-        <h1 className="mt-12 text-3xl font-bold">Charts</h1>
-        <div className="filtersection lg:w-3/5 h-full mt-16">
-          <div className="flex flex-col lg:grid lg:grid-cols-3 justify-center items-center gap-4">
+        <div className="filtersection lg:w-7/10 h-full mt-16">
+          <div className="flex flex-col lg:grid lg:grid-cols-3 justify-center items-center gap-x-16">
             <Dropdown
               label="State"
               options={states}
@@ -186,18 +181,18 @@ export default function Visualizations() {
               onChange={(e) => setInfoType(e.target.value)}
             />
           </div>
-          <div className="w-full h-12 lg:m-4 flex justify-center">
+          <div className="w-full h-16 flex justify-center">
             <button
-              className="w-1/5 h-full bg-blue-500 hover:bg-[#159AB2] text-white rounded-md"
+              className="w-1/4 h-full bg-blue-500 hover:bg-[#159AB2] rounded-full"
               onClick={handleSubmit}
             >
-              Submit
+              <p className="text-white text-2xl font-extrabold"> Submit </p>
             </button>
           </div>
         </div>
       </div>
       {showText && !gifState && (
-        <span className="chartInfo w-full h-10 my-12 lg:my-2 text-lg text-black flex items-center justify-center text-center">
+        <span className="chartInfo w-full h-10 my-12 lg:my-2 text-lg text-black font-extrabold flex items-center justify-center text-center">
           Annual average trend for {state}, {district} over {parameter} from{" "}
           {startingYear} to {endingYear}
         </span>
@@ -209,9 +204,8 @@ export default function Visualizations() {
         >
           {gifState ? (
             <>
-              <span className="chartInfo w-full h-10 my-12 lg:my-2 text-lg text-black flex items-center justify-center text-center">
-                {" "}
-                Loading the visualizations...{" "}
+              <span className="chartInfo w-full h-10 my-12 lg:my-2 text-lg text-black font-extrabold flex items-center justify-center text-center">
+                Loading the visualizations...
               </span>
               <Image src={preLoader} alt="Loading..." className="" />
             </>
@@ -224,7 +218,7 @@ export default function Visualizations() {
                       data={data}
                       width={900}
                       height={400}
-                      xLabel={"Years"}
+                      xLabel="Years"
                       yLabel={parameter}
                       unit={unit}
                     />
@@ -236,7 +230,7 @@ export default function Visualizations() {
                       data={data}
                       width={600}
                       height={300}
-                      xLabel={"Years"}
+                      xLabel="Years"
                       yLabel={parameter}
                       unit={unit}
                     />
@@ -248,15 +242,14 @@ export default function Visualizations() {
                       data={data}
                       width={400}
                       height={200}
-                      xLabel={"Years"}
+                      xLabel="Years"
                       yLabel={parameter}
                       unit={unit}
                     />
-                    s
                   </div>
                 </div>
                 <button
-                  className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  className="mt-4 bg-green-500 hover:bg-green-700 text-white font-extrabold py-2 px-4 rounded"
                   onClick={handleExport}
                 >
                   Export as PNG
