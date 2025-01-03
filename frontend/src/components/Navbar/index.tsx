@@ -1,15 +1,13 @@
-
-import styles from './index.module.css';
+import Logo from "../../../public/Logo.png";
+import Image from "next/image";
 
 export default function Navbar() {
   return (
-    <nav className={styles.navbar}>
-      <div className={styles.logo}>Logo</div>
-      <div className={styles.socialIcons}>
-        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className={styles.icon}>FB</a>
-        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className={styles.icon}>TW</a>
-        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className={styles.icon}>IG</a>
+    <nav className="h-24 mb-32 flex items-center">
+      <div className="ml-8 mt-8 flex-shrink-0">
+        <Image src={Logo} alt="Logo" height={80} />
       </div>
+      <div className="ml-auto"></div>
     </nav>
   );
 }
